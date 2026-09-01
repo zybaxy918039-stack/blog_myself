@@ -1,0 +1,216 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>部署管理 - 我的博客</title>
+    <link rel="stylesheet" href="deploy.css">
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>部署管理</h1>
+            <nav>
+                <a href="index.html">返回首页</a>
+            </nav>
+        </header>
+        <main class="fade-in">
+            <div class="deploy-section">
+                <h2>Cloudflare Pages 部署</h2>
+                <p>点击下面的按钮连接你的 GitHub 仓库并部署到 Cloudflare Pages</p>
+                
+                <div class="deployment-form">
+                    <div class="form-group">
+                        <label for="github-repo">GitHub 仓库地址</label>
+                        <input type="text" id="github-repo" placeholder="https://github.com/username/repo-name">
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="branch-name">部署分支</label>
+                        <select id="branch-name">
+                            <option value="main">main (推荐)</option>
+                            <option value="master">master</option>
+                            <option value="develop">develop</option>
+                        </select>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="domain">自定义域名</label>
+                        <input type="text" id="domain" placeholder="yourdomain.com">
+                        <small class="hint">留空则使用 Cloudflare 默认域名</small>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="build-command">构建命令</label>
+                        <input type="text" id="build-command" value="echo 'No build needed'" disabled>
+                        <small class="hint">静态站点无需构建</small>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="publish-dir">发布目录</label>
+                        <input type="text" id="publish-dir" value="." disabled>
+                        <small class="hint">根目录发布</small>
+                    </div>
+                    
+                    <div class="checkbox-group">
+                        <label class="checkbox-label">
+                            <input type="checkbox" id="auto-deploy" checked>
+                            启用自动部署（Push 自动触发）
+                        </label>
+                        <label class="checkbox-label">
+                            <input type="checkbox" id="https-only">
+                            强制 HTTPS
+                        </label>
+                    </div>
+                    
+                    <button class="btn deploy-btn" id="deploy-btn">
+                        <span class="btn-text">开始部署</span>
+                        <span class="btn-loading hidden">部署中...</span>
+                    </button>
+                </div>
+                
+                <div class="deployment-status hidden" id="status">
+                    <div class="status-content">
+                        <h3>部署进度</h3>
+                        <div class="progress-bar">
+                            <div class="progress-fill" id="progress"></div>
+                        </div>
+                        <p class="status-text" id="status-text">准备开始...</p>
+                    </div>
+                </div>
+            </div>
+        </main>
+        <footer>
+            <p>&copy; 2026 我的博客 - 部署管理</p>
+        </footer>
+    </div>
+    <script src="deploy.js"></script>
+</body>
+</html>
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>部署管理 - 我的博客</title>
+    <link rel="stylesheet" href="deploy.css">
+    <meta name="description" content="部署你的博客到 Cloudflare Pages">
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>🚀 部署管理</h1>
+            <nav>
+                <a href="index.html" class="nav-back">← 返回首页</a>
+            </nav>
+        </header>
+        <main class="fade-in">
+            <div class="deploy-info">
+                <h2>连接 GitHub 仓库并部署到 Cloudflare Pages</h2>
+                <p>点击下方按钮开始部署流程，部署完成后你的博客将获得一个 Cloudflare Pages 域名，并支持绑定自定义域名。</p>
+            </div>
+            
+            <div class="deployment-form">
+                <div class="form-group">
+                    <label for="github-repo">GitHub 仓库地址</label>
+                    <div class="input-wrapper">
+                        <input type="text" id="github-repo" placeholder="https://github.com/用户名/仓库名">
+                        <a href="https://github.com/new" class="create-repo-btn" target="_blank">创建新仓库</a>
+                    </div>
+                    <small class="hint">格式: https://github.com/用户名/仓库名</small>
+                </div>
+                
+                <div class="form-group">
+                    <label for="branch-name">部署分支</label>
+                    <select id="branch-name">
+                        <option value="main">main (推荐)</option>
+                        <option value="master">master</option>
+                        <option value="develop">develop</option>
+                    </select>
+                </div>
+                
+                <div class="form-group">
+                    <label for="domain">自定义域名</label>
+                    <input type="text" id="domain" placeholder="yourdomain.com">
+                    <small class="hint">留空则使用 Cloudflare 默认域名 (xxx.pages.dev)</small>
+                </div>
+                
+                <div class="form-group">
+                    <label for="build-command">构建命令</label>
+                    <input type="text" id="build-command" value="echo '静态站点无需构建'" disabled>
+                    <small class="hint">静态网站无需构建命令</small>
+                </div>
+                
+                <div class="form-group">
+                    <label for="publish-dir">发布目录</label>
+                    <input type="text" id="publish-dir" value="/" disabled>
+                    <small class="hint">根目录部署</small>
+                </div>
+                
+                <div class="checkbox-group">
+                    <label class="checkbox-label">
+                        <input type="checkbox" id="auto-deploy" checked>
+                        <div class="checkbox-content">
+                            <span class="checkbox-text">启用自动部署（Push 到分支自动触发部署）</span>
+                            <span class="checkbox-desc">每次提交代码到指定分支会自动重新部署</span>
+                        </div>
+                    </label>
+                    <label class="checkbox-label">
+                        <input type="checkbox" id="https-only" checked>
+                        <div class="checkbox-content">
+                            <span class="checkbox-text">强制 HTTPS</span>
+                            <span class="checkbox-desc">只允许通过 HTTPS 访问站点</span>
+                        </div>
+                    </label>
+                </div>
+                
+                <button class="btn deploy-btn" id="deploy-btn">
+                    <span class="btn-icon">🚀</span>
+                    <span class="btn-text">开始部署</span>
+                    <span class="btn-loading hidden">部署中...</span>
+                </button>
+            </div>
+            
+            <div class="deployment-status hidden" id="status">
+                <div class="status-content">
+                    <h3>部署进度</h3>
+                    <div class="progress-bar">
+                        <div class="progress-fill" id="progress"></div>
+                    </div>
+                    <p class="status-text" id="status-text">准备开始...</p>
+                </div>
+                <div class="status-details hidden" id="status-details">
+                    <h4>部署详情</h4>
+                    <div class="status-item">
+                        <span class="status-label">部署状态:</span>
+                        <span class="status-value" id="deploy-status">进行中</span>
+                    </div>
+                    <div class="status-item">
+                        <span class="status-label">预估时间:</span>
+                        <span class="status-value" id="deploy-time">约 2-3 分钟</span>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="deploy-guides">
+                <h3>部署指南</h3>
+                <ol class="guide-steps">
+                    <li>确保你的博客代码已提交到 GitHub 仓库</li>
+                    <li>填写正确的 GitHub 仓库地址</li>
+                    <li>点击「开始部署」按钮</li>
+                    <li>在 Cloudflare Dashboard 中完成授权</li>
+                    <li>等待部署完成</li>
+                    <li>绑定自定义域名（可选）</li>
+                </ol>
+                <a href="https://developers.cloudflare.com/pages/" target="_blank" class="cf-link">
+                    📚 Cloudflare Pages 官方文档 →
+                </a>
+            </div>
+        </main>
+        <footer>
+            <p>&copy; 2026 我的博客 - 部署管理</p>
+        </footer>
+    </div>
+    <script src="deploy.js"></script>
+</body>
+</html>

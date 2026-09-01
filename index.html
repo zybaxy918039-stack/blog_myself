@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>我的博客 - 个人网络日志</title>
+    <meta name="description" content="一个混合型个人博客，包含技术文章、生活随笔和小说草稿">
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div class="container">
+        <header class="header fade-in">
+            <div class="header-content">
+                <h1>我的博客</h1>
+                <p class="subtitle">技术文章 · 生活随笔 · 小说草稿</p>
+            </div>
+            <nav class="main-nav">
+                <a href="index.html" class="nav-item active">首页</a>
+                <a href="about.html" class="nav-item">关于</a>
+                <a href="deploy.html" class="nav-item deploy-link">部署</a>
+            </nav>
+        </header>
+        <main class="main-content">
+            <section class="hero-section fade-in">
+                <h2>欢迎来到我的网络日志</h2>
+                <p>在这里记录技术点滴、生活感悟和创作故事</p>
+                <a href="#posts" class="btn btn-primary">开始浏览</a>
+            </section>
+            <section id="posts" class="posts-section fade-in">
+                <div class="section-header">
+                    <h2>最新文章</h2>
+                    <div class="filters">
+                        <button class="filter-btn active" data-filter="all">全部</button>
+                        <button class="filter-btn" data-filter="随笔">随笔</button>
+                        <button class="filter-btn" data-filter="技术">技术</button>
+                        <button class="filter-btn" data-filter="小说">小说</button>
+                    </div>
+                </div>
+                <div class="posts-grid">
+                    <article class="post-card fade-in">
+                        <a href="posts/post1.html" class="post-link">
+                            <div class="post-badge">随笔</div>
+                            <h3 class="post-title">欢迎来到我的博客</h3>
+                            <p class="post-summary">这是我的第一个博客文章，介绍这个博客的用途和计划</p>
+                            <div class="post-meta">
+                                <span class="post-date">2026-09-01</span>
+                                <span class="post-tags">
+                                    <span class="tag">随笔</span>
+                                    <span class="tag">介绍</span>
+                                </span>
+                            </div>
+                        </a>
+                    </article>
+                    <article class="post-card fade-in">
+                        <a href="posts/post2.html" class="post-link">
+                            <div class="post-badge">技术</div>
+                            <h3 class="post-title">如何开始学习编程</h3>
+                            <p class="post-summary">一篇介绍编程学习路径和技术入门的文章</p>
+                            <div class="post-meta">
+                                <span class="post-date">2026-09-01</span>
+                                <span class="post-tags">
+                                    <span class="tag">编程</span>
+                                    <span class="tag">入门</span>
+                                </span>
+                            </div>
+                        </a>
+                    </article>
+                    <article class="post-card add-new-post-card">
+                        <a href="edit.html" class="add-new-link">
+                            <div class="plus-icon">+</div>
+                            <h3>写新文章</h3>
+                            <p>开始你的创作之旅</p>
+                        </a>
+                    </article>
+                </div>
+            </section>
+        </main>
+        <footer class="site-footer">
+            <p>&copy; 2026 我的博客 - 用写作记录生活</p>
+        </footer>
+    </div>
+    <script src="script.js"></script>
+</body>
+</html>
