@@ -3,30 +3,43 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>我的博客 - 个人网络日志</title>
+    <title>雾中书桌 - 个人网络日志</title>
     <meta name="description" content="一个混合型个人博客，包含技术文章、生活随笔和小说草稿">
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
-    <div class="container">
-        <header class="header fade-in">
-            <div class="header-content">
-                <h1>我的博客</h1>
-                <p class="subtitle">技术文章 · 生活随笔 · 小说草稿</p>
-            </div>
-            <nav class="main-nav">
-                <a href="index.html" class="nav-item active">首页</a>
-                <a href="about.html" class="nav-item">关于</a>
-                <a href="deploy.html" class="nav-item deploy-link">部署</a>
+    <div class="backdrop-layer" aria-hidden="true"></div>
+    <div class="page-shell">
+        <aside class="sidebar">
+            <a class="brand" href="index.html">
+                <span class="brand-mark">书</span>
+                <span class="brand-title">雾中书桌<span class="brand-sub">个人网络日志</span></span>
+            </a>
+            <nav class="bubble-nav" aria-label="主导航">
+                <a href="index.html" class="nav-bubble active">首页</a>
+                <a href="index.html#posts" class="nav-bubble">文章</a>
+                <a href="edit.html" class="nav-bubble">写作</a>
+                <a href="about.html" class="nav-bubble">关于</a>
+                <a href="admin/index.html" class="nav-bubble">管理</a>
             </nav>
-        </header>
-        <main class="main-content">
-            <section class="hero-section fade-in">
+            <div class="sidebar-foot">写作、技术、小说与生活随想。</div>
+        </aside>
+        <main class="glass-panel fade-in">
+            <div class="page-head">
+                <div>
+                    <div class="eyebrow">网络日志</div>
+                    <h1>雾中书桌</h1>
+                </div>
+                <p>把稍纵即逝的想法留在纸上，把可以继续生长的草稿留在身边。</p>
+            </div>
+
+            <section class="hero-section">
                 <h2>欢迎来到我的网络日志</h2>
-                <p>在这里记录技术点滴、生活感悟和创作故事</p>
+                <p>技术、随笔、小说草稿和项目记录都收在这里。最近的内容会出现在文章区，之后也可以按标签分类浏览。</p>
                 <a href="#posts" class="btn btn-primary">开始浏览</a>
             </section>
-            <section id="posts" class="posts-section fade-in">
+
+            <section id="posts" class="posts-section">
                 <div class="section-header">
                     <h2>最新文章</h2>
                     <div class="filters">
@@ -37,11 +50,11 @@
                     </div>
                 </div>
                 <div class="posts-grid">
-                    <article class="post-card fade-in">
+                    <article class="post-card" data-categories="随笔">
                         <a href="posts/post1.html" class="post-link">
                             <div class="post-badge">随笔</div>
                             <h3 class="post-title">欢迎来到我的博客</h3>
-                            <p class="post-summary">这是我的第一个博客文章，介绍这个博客的用途和计划</p>
+                            <p class="post-summary">这是我的第一个博客文章，介绍这个博客的用途和计划。</p>
                             <div class="post-meta">
                                 <span class="post-date">2026-09-01</span>
                                 <span class="post-tags">
@@ -51,11 +64,11 @@
                             </div>
                         </a>
                     </article>
-                    <article class="post-card fade-in">
+                    <article class="post-card" data-categories="技术">
                         <a href="posts/post2.html" class="post-link">
                             <div class="post-badge">技术</div>
                             <h3 class="post-title">如何开始学习编程</h3>
-                            <p class="post-summary">一篇介绍编程学习路径和技术入门的文章</p>
+                            <p class="post-summary">一篇介绍编程学习路径和技术入门的文章。</p>
                             <div class="post-meta">
                                 <span class="post-date">2026-09-01</span>
                                 <span class="post-tags">
@@ -74,10 +87,11 @@
                     </article>
                 </div>
             </section>
+
+            <footer class="site-footer">
+                <p>&copy; 2026 雾中书桌 - 用写作记录生活</p>
+            </footer>
         </main>
-        <footer class="site-footer">
-            <p>&copy; 2026 我的博客 - 用写作记录生活</p>
-        </footer>
     </div>
     <script src="script.js"></script>
 </body>

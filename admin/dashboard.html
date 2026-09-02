@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>管理后台 - 雾中书桌</title>
+    <meta name="robots" content="noindex,nofollow">
+    <link rel="stylesheet" href="../style.css">
+    <link rel="stylesheet" href="admin.css">
+</head>
+<body>
+    <div class="backdrop-layer" aria-hidden="true"></div>
+    <div class="admin-shell">
+        <aside class="admin-sidebar">
+            <a class="brand" href="../index.html">
+                <span class="brand-mark">书</span>
+                <span class="brand-title">雾中书桌<span class="brand-sub">管理后台</span></span>
+            </a>
+            <nav class="admin-nav" aria-label="后台导航">
+                <a class="admin-nav-item active" href="#appearance">外观设置</a>
+                <a class="admin-nav-item" href="#writing">文章管理</a>
+                <a class="admin-nav-item" href="#deploy">部署设置</a>
+            </nav>
+            <button class="btn btn-secondary" id="logout-btn" type="button">退出登录</button>
+            <div class="admin-sidebar-foot">管理员目录：/admin/</div>
+        </aside>
+
+        <main class="glass-panel admin-main fade-in">
+            <div class="page-head">
+                <div>
+                    <div class="eyebrow">管理后台</div>
+                    <h1>网站设置</h1>
+                </div>
+                <p>外观、文章与部署相关设置统一在这里管理。</p>
+            </div>
+
+            <section id="appearance" class="admin-section active">
+                <h2>外观设置</h2>
+                <div class="appearance">
+                    <section class="setting-block">
+                        <h3>背景图</h3>
+                        <div class="preset-grid">
+                            <button class="preset-card active" type="button" data-image="assets/bg-mist-morning.jpg" style="background-image:url('../assets/bg-mist-morning.jpg')">
+                                <span>雾林清晨</span>
+                            </button>
+                            <button class="preset-card" type="button" data-image="assets/bg-night-ink.jpg" style="background-image:url('../assets/bg-night-ink.jpg')">
+                                <span>墨蓝夜雾</span>
+                            </button>
+                            <button class="preset-card" type="button" data-image="assets/bg-warm-desk.jpg" style="background-image:url('../assets/bg-warm-desk.jpg')">
+                                <span>暮色书桌</span>
+                            </button>
+                        </div>
+                        <div class="control-group" style="margin-top:18px">
+                            <label for="bg-url">背景图链接</label>
+                            <input type="url" id="bg-url" value="../assets/bg-mist-morning.jpg" autocomplete="url" spellcheck="false">
+                        </div>
+                    </section>
+
+                    <section class="setting-block">
+                        <h3>毛玻璃面板</h3>
+                        <div class="control-grid">
+                            <div class="control-group">
+                                <label for="opacity-range">透光度 <output id="opacity-value">78%</output></label>
+                                <input type="range" id="opacity-range" min="0.2" max="0.95" step="0.01" value="0.78">
+                            </div>
+                            <div class="control-group">
+                                <label for="blur-range">模糊强度 <output id="blur-value">18px</output></label>
+                                <input type="range" id="blur-range" min="0" max="40" step="1" value="18">
+                            </div>
+                        </div>
+                    </section>
+
+                    <section class="setting-block">
+                        <h3>保存方式</h3>
+                        <div class="appearance-actions">
+                            <button class="btn btn-secondary" id="save-appearance" type="button">保存外观</button>
+                            <button class="btn btn-secondary" id="reset-appearance" type="button">恢复默认</button>
+                            <button class="btn btn-secondary" type="button" disabled title="接入 Cloudflare R2 后可用">上传背景图</button>
+                        </div>
+                        <div class="status-line" id="status-line" style="margin-top:14px">当前保存方式：本机浏览器</div>
+                    </section>
+                </div>
+            </section>
+
+            <section id="writing" class="admin-section">
+                <h2>文章管理</h2>
+                <p>后续可以在这里维护 Markdown 文章与标签。目前写作入口仍从博客侧边栏进入。</p>
+                <div class="admin-actions">
+                    <a class="btn btn-primary" href="../edit.html">打开写作页</a>
+                </div>
+            </section>
+
+            <section id="deploy" class="admin-section">
+                <h2>部署设置</h2>
+                <p>后续将在这里展示 Cloudflare Pages、GitHub Actions、D1 与 R2 的连接状态。</p>
+                <div class="admin-placeholder">
+                    部署功能尚未接入。计划：文章推送到 GitHub 后由 Actions 构建，再部署到 Cloudflare Pages；评论与附件后续接入 D1 / R2。
+                </div>
+            </section>
+
+            <footer class="site-footer">
+                <p>&copy; 2026 雾中书桌 - 管理后台</p>
+            </footer>
+        </main>
+    </div>
+    <script src="../script.js"></script>
+    <script src="auth.js"></script>
+    <script src="admin.js"></script>
+</body>
+</html>

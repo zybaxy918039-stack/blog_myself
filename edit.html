@@ -3,161 +3,103 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>编辑文章 - 我的博客</title>
-    <link rel="stylesheet" href="edit.css">
-</head>
-<body>
-    <div class="container">
-        <header>
-            <h1>✏️ 编辑文章</h1>
-            <nav>
-                <a href="index.html">返回首页</a>
-                <a href="preview.html">预览</a>
-            </nav>
-        </header>
-        <main class="editor-container fade-in">
-            <div class="editor-header">
-                <div class="input-group">
-                    <label>标题</label>
-                    <input type="text" id="post-title" placeholder="输入文章标题..." value="欢迎来到我的博客">
-                </div>
-                <div class="input-group">
-                    <label>分类</label>
-                    <select id="post-category">
-                        <option value="随笔">随笔</option>
-                        <option value="小说">小说</option>
-                        <option value="技术">技术</option>
-                        <option value="项目">项目</option>
-                    </select>
-                </div>
-                <div class="input-group tags-input">
-                    <label>标签</label>
-                    <div class="tags-container">
-                        <input type="text" id="tags-input" placeholder="输入标签，按回车添加...">
-                        <div class="tags-list" id="tags-list">
-                            <span class="tag">随笔</span>
-                            <span class="tag">介绍</span>
-                        </div>
-                    </div>
-                </div>
-            </div>
-            <div class="editor-content">
-                <div class="editor-pane">
-                    <div class="pane-header">
-                        <span>📝 Markdown</span>
-                        <div class="toolbar">
-                            <button class="tool-btn" onclick="formatText('bold')">**B**</button>
-                            <button class="tool-btn" onclick="formatText('italic')"><i>I</i></button>
-                            <button class="tool-btn" onclick="formatText('header')">H1</button>
-                            <button class="tool-btn" onclick="insertImage()">🖼️</button>
-                        </div>
-                    </div>
-                    <textarea id="markdown-editor" spellcheck="false"></textarea>
-                </div>
-                <div class="preview-pane">
-                    <div class="pane-header">
-                        <span>👁️ 预览</span>
-                    </div>
-                    <div class="preview-content" id="markdown-preview"></div>
-                </div>
-            </div>
-            <div class="editor-footer">
-                <button class="btn save-btn" id="save-btn">
-                    💾 保存草稿
-                </button>
-                <button class="btn publish-btn" id="publish-btn">
-                    🚀 发布文章
-                </button>
-            </div>
-        </main>
-        <footer>
-            <p>&copy; 2026 我的博客 - 编辑器</p>
-        </footer>
-    </div>
-    <script src="edit.js"></script>
-</body>
-</html>
-<!DOCTYPE html>
-<html lang="zh-CN">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>写新文章 - 我的博客</title>
-    <link rel="stylesheet" href="edit.css">
+    <title>写新文章 - 雾中书桌</title>
     <meta name="description" content="在线编辑 Markdown 文章">
+    <link rel="stylesheet" href="style.css">
 </head>
 <body>
-    <div class="container">
-        <header>
-            <h1>✏️ 写新文章</h1>
-            <nav>
-                <a href="index.html" class="nav-back">← 返回首页</a>
+    <div class="backdrop-layer" aria-hidden="true"></div>
+    <div class="page-shell">
+        <aside class="sidebar">
+            <a class="brand" href="index.html">
+                <span class="brand-mark">书</span>
+                <span class="brand-title">雾中书桌<span class="brand-sub">个人网络日志</span></span>
+            </a>
+            <nav class="bubble-nav" aria-label="主导航">
+                <a href="index.html" class="nav-bubble">首页</a>
+                <a href="index.html#posts" class="nav-bubble">文章</a>
+                <a href="edit.html" class="nav-bubble active">写作</a>
+                <a href="about.html" class="nav-bubble">关于</a>
+                <a href="admin/index.html" class="nav-bubble">管理</a>
             </nav>
-        </header>
-        <main class="editor-container fade-in">
-            <div class="editor-header">
-                <div class="input-group">
-                    <label for="post-title">文章标题</label>
-                    <input type="text" id="post-title" placeholder="输入文章标题..." autocomplete="off">
+            <div class="sidebar-foot">草稿会先保存在当前浏览器中。</div>
+        </aside>
+        <main class="glass-panel fade-in">
+            <div class="page-head">
+                <div>
+                    <div class="eyebrow">写作</div>
+                    <h1>写新文章</h1>
                 </div>
-                <div class="input-group">
-                    <label for="post-category">分类</label>
-                    <select id="post-category">
-                        <option value="随笔">随笔</option>
-                        <option value="小说">小说</option>
-                        <option value="技术">技术</option>
-                        <option value="项目">项目</option>
-                    </select>
-                </div>
-                <div class="input-group tags-input">
-                    <label for="tags-input">标签</label>
-                    <div class="tags-container">
-                        <input type="text" id="tags-input" placeholder="输入标签，按回车添加..." autocomplete="off">
-                        <div class="tags-list" id="tags-list"></div>
-                    </div>
-                </div>
+                <p>左侧写 Markdown，右侧实时预览。</p>
             </div>
-            <div class="editor-content">
-                <div class="editor-pane">
-                    <div class="pane-header">
-                        <span>📝 Markdown 编辑器</span>
-                        <div class="toolbar">
-                            <button class="tool-btn" onclick="formatText('bold')" title="加粗">**B**</button>
-                            <button class="tool-btn" onclick="formatText('italic')" title="斜体"><i>I</i></button>
-                            <button class="tool-btn" onclick="formatText('header')" title="标题">H1</button>
-                            <button class="tool-btn" onclick="insertImage()" title="插入图片">🖼️</button>
-                            <button class="tool-btn" onclick="insertBlockquote()" title="引用">❝</button>
-                            <button class="tool-btn" onclick="insertList()" title="列表">•</button>
+
+            <div class="editor-container">
+                <div class="editor-header">
+                    <div class="input-group">
+                        <label for="post-title">文章标题</label>
+                        <input type="text" id="post-title" placeholder="输入文章标题..." autocomplete="off">
+                    </div>
+                    <div class="input-group">
+                        <label for="post-category">分类</label>
+                        <select id="post-category">
+                            <option value="随笔">随笔</option>
+                            <option value="小说">小说</option>
+                            <option value="技术">技术</option>
+                            <option value="项目">项目</option>
+                        </select>
+                    </div>
+                    <div class="input-group tags-input">
+                        <label for="tags-input">标签</label>
+                        <div class="tags-container">
+                            <input type="text" id="tags-input" placeholder="输入标签，按回车添加..." autocomplete="off">
+                            <div class="tags-list" id="tags-list"></div>
                         </div>
                     </div>
-                    <textarea id="markdown-editor" placeholder="# 文章标题&#10;&#10;开始你的创作..." spellcheck="false"></textarea>
                 </div>
-                <div class="preview-pane">
-                    <div class="pane-header">
-                        <span>👁️ 实时预览</span>
+
+                <div class="editor-content">
+                    <div class="editor-pane">
+                        <div class="pane-header">
+                            <span>Markdown 编辑器</span>
+                            <div class="toolbar">
+                                <button class="tool-btn" onclick="formatText('bold')" title="加粗" type="button">B</button>
+                                <button class="tool-btn" onclick="formatText('italic')" title="斜体" type="button">I</button>
+                                <button class="tool-btn" onclick="formatText('header')" title="标题" type="button">H1</button>
+                                <button class="tool-btn" onclick="insertImage()" title="插入图片" type="button">图</button>
+                                <button class="tool-btn" onclick="insertBlockquote()" title="引用" type="button">引</button>
+                                <button class="tool-btn" onclick="insertList()" title="列表" type="button">列</button>
+                            </div>
+                        </div>
+                        <textarea id="markdown-editor" placeholder="# 文章标题&#10;&#10;开始你的创作..." spellcheck="false"></textarea>
                     </div>
-                    <div class="preview-content" id="markdown-preview">
-                        <h1>实时预览将显示在这里</h1>
-                        <p>开始编辑 Markdown 内容，右侧将实时显示效果。</p>
-                        <blockquote>写作是一种表达，分享是一种快乐。</blockquote>
+                    <div class="preview-pane">
+                        <div class="pane-header">
+                            <span>实时预览</span>
+                        </div>
+                        <div class="preview-content" id="markdown-preview">
+                            <h1>实时预览</h1>
+                            <p>开始编辑 Markdown 内容，右侧将实时显示效果。</p>
+                            <blockquote>写作是一种表达，分享是一种快乐。</blockquote>
+                        </div>
                     </div>
+                </div>
+
+                <div class="editor-footer">
+                    <button class="btn btn-secondary" id="save-btn" title="保存为草稿" type="button">
+                        <span>保存草稿</span>
+                    </button>
+                    <button class="btn btn-primary" id="publish-btn" title="发布文章" type="button">
+                        <span>发布文章</span>
+                    </button>
                 </div>
             </div>
-            <div class="editor-footer">
-                <button class="btn save-btn" id="save-btn" title="保存为草稿">
-                    <span class="btn-icon">💾</span>
-                    <span class="btn-text">保存草稿</span>
-                </button>
-                <button class="btn publish-btn" id="publish-btn" title="发布文章">
-                    <span class="btn-icon">🚀</span>
-                    <span class="btn-text">发布文章</span>
-                </button>
-            </div>
+
+            <footer class="site-footer">
+                <p>&copy; 2026 雾中书桌 - Markdown 编辑器</p>
+            </footer>
         </main>
-        <footer>
-            <p>&copy; 2026 我的博客 - Markdown 编辑器</p>
-        </footer>
     </div>
+    <script src="script.js"></script>
     <script src="edit.js"></script>
 </body>
 </html>

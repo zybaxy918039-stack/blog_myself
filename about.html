@@ -3,105 +3,85 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>关于我 - 我的博客</title>
+    <title>关于我 - 雾中书桌</title>
+    <meta name="description" content="关于这个个人博客与作者">
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
-    <div class="container">
-        <header>
-            <h1>我的博客</h1>
-            <nav>
-                <a href="index.html">首页</a>
-                <a href="about.html" class="active">关于</a>
+    <div class="backdrop-layer" aria-hidden="true"></div>
+    <div class="page-shell">
+        <aside class="sidebar">
+            <a class="brand" href="index.html">
+                <span class="brand-mark">书</span>
+                <span class="brand-title">雾中书桌<span class="brand-sub">个人网络日志</span></span>
+            </a>
+            <nav class="bubble-nav" aria-label="主导航">
+                <a href="index.html" class="nav-bubble">首页</a>
+                <a href="index.html#posts" class="nav-bubble">文章</a>
+                <a href="edit.html" class="nav-bubble">写作</a>
+                <a href="about.html" class="nav-bubble active">关于</a>
+                <a href="admin/index.html" class="nav-bubble">管理</a>
             </nav>
-        </header>
-        <main class="post-content fade-in">
-            <h1 class="post-title">关于我</h1>
-            <article>
-                <p>欢迎来到我的博客！我是 [你的名字]，一个热爱技术和创作的人。</p>
-                <p>在这个博客上，我会分享：</p>
-                <ul>
-                    <li><strong>技术文章</strong>：编程技巧、工具使用、项目经验</li>
-                    <li><strong>生活随笔</strong>：日常点滴、思考感悟、读书笔记</li>
-                    <li><strong>小说创作</strong>：故事草稿、角色设定、创意想法</li>
-                    <li><strong>项目展示</strong>：个人作品、开源项目、实验尝试</li>
-                </ul>
-                <p>希望你能在这里找到有价值的内容，也欢迎随时和我交流！</p>
-                <h2>联系我</h2>
-                <p>Email: your-email@example.com</p>
-                <p>GitHub: <a href="https://github.com/yourusername">yourusername</a></p>
-            </article>
-            <div class="nav-buttons">
-                <a href="index.html" class="btn btn-secondary">返回首页</a>
+            <div class="sidebar-foot">写作、技术、小说与生活随想。</div>
+        </aside>
+        <main class="glass-panel fade-in">
+            <div class="page-head">
+                <div>
+                    <div class="eyebrow">关于</div>
+                    <h1>关于我</h1>
+                </div>
+                <p>这个博客用来收纳我想写、想留、想继续生长的东西。</p>
             </div>
-        </main>
-        <footer>
-            <p>&copy; 2026 我的博客</p>
-        </footer>
-    </div>
-</body>
-</html>
-<!DOCTYPE html>
-<html lang="zh-CN">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>关于我 - 我的博客</title>
-    <link rel="stylesheet" href="style.css">
-</head>
-<body>
-    <div class="container">
-        <header class="header fade-in">
-            <h1>关于我</h1>
-            <nav class="main-nav">
-                <a href="index.html" class="nav-item">首页</a>
-                <a href="about.html" class="nav-item active">关于</a>
-                <a href="deploy.html" class="nav-item deploy-link">部署</a>
-            </nav>
-        </header>
-        <main class="main-content">
-            <article class="post-content fade-in">
+
+            <article class="post-content">
                 <div class="about-content">
-                    <div class="profile-section">
+                    <section class="profile-section">
                         <div class="profile-avatar">
                             <span class="avatar-text">博主</span>
                         </div>
-                        <h2>我是博主</h2>
-                        <p class="bio">热爱技术和创作，用这个博客记录生活点滴和技术分享。</p>
-                    </div>
-                    <div class="content-section">
+                        <div>
+                            <h2>我是博主</h2>
+                            <p class="bio">热爱技术和创作，用这个博客记录生活点滴、技术分享和未完的故事。</p>
+                        </div>
+                    </section>
+
+                    <section class="content-section">
                         <h3>关于这个博客</h3>
-                        <p>欢迎来到我的博客！在这个平台上，我会分享：</p>
+                        <p>欢迎来到我的博客。这里会慢慢积累：</p>
                         <ul class="topics-list">
-                           <li><strong>技术文章</strong> - 编程技巧、工具使用、项目经验</li>
-                           <li><strong>生活随笔</strong> - 日常点滴、思考感悟、读书笔记</li>
-                           <li><strong>小说创作</strong> - 故事草稿、角色设定、创意想法</li>
-                           <li><strong>项目展示</strong> - 个人作品、开源项目、实验尝试</li>
+                            <li><strong>技术文章</strong> - 编程技巧、工具使用、项目经验</li>
+                            <li><strong>生活随笔</strong> - 日常点滴、思考感悟、读书笔记</li>
+                            <li><strong>小说创作</strong> - 故事草稿、角色设定、创意想法</li>
+                            <li><strong>项目展示</strong> - 个人作品、开源项目、实验尝试</li>
                         </ul>
-                        <p>希望你能在这里找到有价值的内容，也欢迎随时和我交流！</p>
-                    </div>
-                    <div class="contact-section">
+                        <p>希望你能在这里找到有价值的内容，也欢迎随时交流。</p>
+                    </section>
+
+                    <section class="contact-section">
                         <h3>联系我</h3>
                         <div class="contact-links">
                             <a href="mailto:your-email@example.com" class="contact-item">
-                                <span class="icon">📧</span>
+                                <span class="icon">邮</span>
                                 <span>your-email@example.com</span>
                             </a>
                             <a href="https://github.com/yourusername" class="contact-item">
-                                <span class="icon">GitHub</span>
+                                <span class="icon">G</span>
                                 <span>github.com/yourusername</span>
                             </a>
                         </div>
-                    </div>
+                    </section>
                 </div>
+
                 <div class="nav-actions">
                     <a href="index.html" class="btn btn-secondary">返回首页</a>
                 </div>
             </article>
+
+            <footer class="site-footer">
+                <p>&copy; 2026 雾中书桌</p>
+            </footer>
         </main>
-        <footer class="site-footer">
-            <p>&copy; 2026 我的博客</p>
-        </footer>
     </div>
+    <script src="script.js"></script>
 </body>
 </html>

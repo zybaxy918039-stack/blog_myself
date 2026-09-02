@@ -1,0 +1,258 @@
+/* 管理后台专用样式 */
+.admin-shell {
+  position: relative;
+  z-index: 1;
+  width: min(1380px, calc(100% - 40px));
+  margin: 0 auto;
+  display: grid;
+  grid-template-columns: 224px minmax(0, 1fr);
+  gap: 24px;
+  align-items: start;
+  padding: 24px 0 48px;
+  min-height: 100vh;
+}
+
+.admin-sidebar {
+  position: sticky;
+  top: 24px;
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+}
+
+.admin-nav {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.admin-nav-item {
+  display: block;
+  padding: 12px 16px;
+  border: 1px solid var(--line-light);
+  border-radius: 16px;
+  color: var(--ink);
+  background: var(--surface-mist);
+  text-decoration: none;
+  font-weight: 700;
+  -webkit-backdrop-filter: blur(14px);
+  backdrop-filter: blur(14px);
+  box-shadow: var(--shadow-soft);
+  transition: transform 0.22s ease, color 0.22s ease, background 0.22s ease;
+}
+
+.admin-nav-item:hover,
+.admin-nav-item:focus-visible {
+  transform: translateY(-2px);
+  color: var(--accent-deep);
+  outline: none;
+}
+
+.admin-nav-item.active {
+  color: #fff;
+  background: linear-gradient(135deg, var(--accent), var(--accent-deep));
+  border-color: transparent;
+  box-shadow: 0 12px 28px rgba(29, 111, 99, 0.28);
+}
+
+.admin-sidebar-foot {
+  padding: 12px 14px;
+  color: var(--ink-faint);
+  font-size: 0.82rem;
+  background: var(--surface-mist);
+  border: 1px solid var(--line-light);
+  border-radius: 14px;
+}
+
+.admin-section {
+  display: none;
+}
+
+.admin-section.active {
+  display: block;
+  animation: riseIn 0.45s cubic-bezier(0.22, 0.68, 0.35, 1) both;
+}
+
+.admin-section h2 {
+  margin-bottom: 16px;
+  font-family: var(--font-display);
+  font-size: 1.45rem;
+}
+
+.admin-section > p {
+  margin-bottom: 18px;
+  color: var(--ink-soft);
+}
+
+.admin-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+}
+
+.admin-placeholder {
+  padding: 18px 20px;
+  border: 1px dashed var(--line);
+  border-radius: var(--radius-card);
+  color: var(--ink-soft);
+  background: rgba(255, 255, 255, 0.32);
+  line-height: 1.8;
+}
+
+/* 登录页 */
+.admin-login-page {
+  position: relative;
+  z-index: 1;
+  min-height: 100vh;
+  display: grid;
+  place-items: center;
+  padding: 32px 20px;
+}
+
+.admin-login-card {
+  position: relative;
+  width: min(440px, 100%);
+  padding: 36px;
+  border: 1px solid var(--line-light);
+  border-radius: var(--radius-bubble);
+  color: var(--ink);
+  background: var(--surface-mist);
+  box-shadow: var(--shadow-lift);
+  -webkit-backdrop-filter: blur(14px);
+  backdrop-filter: blur(14px);
+  animation: riseIn 0.6s cubic-bezier(0.22, 0.68, 0.35, 1) both;
+}
+
+.login-mark {
+  display: grid;
+  place-items: center;
+  width: 54px;
+  height: 54px;
+  margin-bottom: 18px;
+  border-radius: 50%;
+  color: #fff;
+  background: linear-gradient(135deg, var(--accent), var(--accent-deep));
+  font-family: var(--font-display);
+  font-size: 1.35rem;
+  box-shadow: 0 10px 24px rgba(47, 143, 127, 0.3);
+}
+
+.admin-login-card h1 {
+  margin: 6px 0 10px;
+  font-family: var(--font-display);
+  font-size: 2.1rem;
+}
+
+.admin-login-card > p {
+  margin-bottom: 24px;
+  color: var(--ink-soft);
+}
+
+.login-field label {
+  display: block;
+  margin: 16px 0 7px;
+  color: var(--ink-soft);
+  font-size: 0.86rem;
+  font-weight: 700;
+}
+
+.login-field input {
+  width: 100%;
+  padding: 12px 14px;
+  border: 1px solid var(--line);
+  border-radius: 10px;
+  background: var(--surface-mist-strong);
+  color: var(--ink);
+  font: inherit;
+  transition: border-color 0.25s ease, box-shadow 0.25s ease, background 0.25s ease;
+}
+
+.login-field input:focus {
+  outline: none;
+  border-color: var(--accent);
+  background: #fff;
+  box-shadow: 0 0 0 4px rgba(47, 143, 127, 0.14);
+}
+
+.login-remember {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin: 16px 0 20px;
+  color: var(--ink-soft);
+  font-size: 0.88rem;
+  cursor: pointer;
+}
+
+.login-remember input {
+  width: 16px;
+  height: 16px;
+  accent-color: var(--accent);
+}
+
+.login-error {
+  margin-top: 14px;
+  color: var(--danger);
+  font-size: 0.88rem;
+  font-weight: 700;
+}
+
+.back-home {
+  position: fixed;
+  top: 22px;
+  left: 24px;
+  z-index: 2;
+  padding: 9px 15px;
+  border-radius: 999px;
+  color: var(--ink);
+  background: var(--surface-mist);
+  border: 1px solid var(--line-light);
+  text-decoration: none;
+  font-size: 0.86rem;
+  font-weight: 700;
+  -webkit-backdrop-filter: blur(14px);
+  backdrop-filter: blur(14px);
+  box-shadow: var(--shadow-soft);
+}
+
+@media (max-width: 960px) {
+  .admin-shell {
+    grid-template-columns: 1fr;
+    width: min(100% - 24px, 760px);
+    padding: 14px 0 36px;
+  }
+
+  .admin-sidebar {
+    position: static;
+    flex-direction: row;
+    align-items: stretch;
+    overflow-x: auto;
+    padding-bottom: 4px;
+  }
+
+  .admin-nav {
+    flex-direction: row;
+  }
+
+  .admin-nav-item,
+  .admin-sidebar .btn {
+    flex: 0 0 auto;
+    white-space: nowrap;
+  }
+}
+
+@media (max-width: 700px) {
+  .admin-shell {
+    width: min(100% - 14px, 640px);
+    gap: 12px;
+  }
+
+  .admin-login-card {
+    padding: 28px 22px;
+  }
+
+  .back-home {
+    left: 14px;
+    top: 14px;
+  }
+}

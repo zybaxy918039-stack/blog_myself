@@ -3,99 +3,57 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>第一篇文章 - 我的博客</title>
+    <title>欢迎来到我的博客 - 雾中书桌</title>
+    <meta name="description" content="第一篇介绍博客用途和计划的随笔">
     <link rel="stylesheet" href="../style.css">
 </head>
 <body>
-    <div class="container">
-        <header>
-            <h1>我的博客</h1>
-            <nav>
-                <a href="../index.html">首页</a>
-                <a href="../about.html">关于</a>
+    <div class="backdrop-layer" aria-hidden="true"></div>
+    <div class="page-shell">
+        <aside class="sidebar">
+            <a class="brand" href="../index.html">
+                <span class="brand-mark">书</span>
+                <span class="brand-title">雾中书桌<span class="brand-sub">个人网络日志</span></span>
+            </a>
+            <nav class="bubble-nav" aria-label="主导航">
+                <a href="../index.html" class="nav-bubble">首页</a>
+                <a href="../index.html#posts" class="nav-bubble">文章</a>
+                <a href="../edit.html" class="nav-bubble">写作</a>
+                <a href="../about.html" class="nav-bubble">关于</a>
+                <a href="../admin/index.html" class="nav-bubble">管理</a>
             </nav>
-        </header>
-        <main class="post-content fade-in">
-            <h1 class="post-title">欢迎来到我的博客</h1>
-            <div class="post-meta">
-                <span class="date">2026年9月1日</span>
-                <span class="tags">
-                    <span class="tag">随笔</span>
-                    <span class="tag">介绍</span>
-                </span>
+            <div class="sidebar-foot">写作、技术、小说与生活随想。</div>
+        </aside>
+        <main class="glass-panel fade-in">
+            <div class="page-head">
+                <div>
+                    <div class="eyebrow">文章</div>
+                    <h1>欢迎来到我的博客</h1>
+                </div>
+                <p>第一篇随笔，先说明这里会记录些什么。</p>
             </div>
-            <article>
-                <p>这是我的第一个博客文章！</p>
-                <p>在这里，我会记录技术文章、生活随笔和小说草稿。</p>
-                <h2>关于这个博客</h2>
-                <p>这个博客是用静态网站技术构建的，具有以下特点：</p>
-                <ul>
-                    <li>简洁优雅的设计</li>
-                    <li> Markdown 编辑支持</li>
-                    <li> 响应式布局</li>
-                    <li> Cloudflare Pages 部署</li>
-                </ul>
-                <h2>未来计划</h2>
-                <p>我计划在这个博客上分享：</p>
-                <ul>
-                    <li>技术文章（编程、工具使用等）</li>
-                    <li>生活随笔（日常点滴）</li>
-                    <li>小说创作（故事和想法）</li>
-                    <li>项目展示（个人作品）</li>
-                </ul>
-                <p>感谢你的访问！希望你能在这里找到有趣的内容。</p>
-            </article>
-            <div class="nav-buttons">
-                <a href="../index.html" class="btn btn-secondary">返回首页</a>
-            </div>
-        </main>
-        <footer>
-            <p>&copy; 2026 我的博客</p>
-        </footer>
-    </div>
-</body>
-</html>
-<!DOCTYPE html>
-<html lang="zh-CN">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>欢迎来到我的博客 - 我的博客</title>
-    <link rel="stylesheet" href="../style.css">
-</head>
-<body>
-    <div class="container">
-        <header class="header fade-in">
-            <h1>我的博客</h1>
-            <nav class="main-nav">
-                <a href="../index.html" class="nav-item">首页</a>
-                <a href="../about.html" class="nav-item">关于</a>
-                <a href="../deploy.html" class="nav-item deploy-link">部署</a>
-            </nav>
-        </header>
-        <main class="main-content">
-            <article class="post-content fade-in">
+
+            <article class="post-content">
                 <div class="post-header">
                     <div class="post-badge">随笔</div>
-                    <h1 class="post-title">欢迎来到我的博客</h1>
                     <div class="post-meta">
-                        <span class="post-date">📅 2026年9月1日</span>
+                        <span class="post-date">2026年9月1日</span>
                         <span class="post-tags">
                             <span class="tag">随笔</span>
                             <span class="tag">介绍</span>
                         </span>
                     </div>
                 </div>
-                <article class="markdown-content">
+                <div class="markdown-content">
                     <p>这是我的第一个博客文章！</p>
                     <p>在这里，我会记录技术文章、生活随笔和小说草稿。</p>
                     <h2>关于这个博客</h2>
-                    <p>这个博客是用静态网站技术构建的，具有以下特点：</p>
+                    <p>这个博客目前是静态网页结构，具有以下特点：</p>
                     <ul>
-                        <li>简洁优雅的设计</li>
+                        <li>毛玻璃气泡式的页面外观</li>
                         <li>Markdown 编辑支持</li>
                         <li>响应式布局</li>
-                        <li>Cloudflare Pages 部署</li>
+                        <li>后续接入 Cloudflare Pages 部署</li>
                     </ul>
                     <h2>未来计划</h2>
                     <p>我计划在这个博客上分享：</p>
@@ -105,16 +63,18 @@
                         <li>小说创作（故事和想法）</li>
                         <li>项目展示（个人作品）</li>
                     </ul>
-                    <p>感谢你的访问！希望你能在这里找到有趣的内容。</p>
-                </article>
+                    <p>感谢你的访问，希望你能在这里找到有趣的内容。</p>
+                </div>
                 <div class="nav-actions">
                     <a href="../index.html" class="btn btn-secondary">返回首页</a>
                 </div>
             </article>
+
+            <footer class="site-footer">
+                <p>&copy; 2026 雾中书桌</p>
+            </footer>
         </main>
-        <footer class="site-footer">
-            <p>&copy; 2026 我的博客</p>
-        </footer>
     </div>
+    <script src="../script.js"></script>
 </body>
 </html>

@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>管理员登录 - 雾中书桌</title>
+    <meta name="robots" content="noindex,nofollow">
+    <link rel="stylesheet" href="../style.css">
+    <link rel="stylesheet" href="admin.css">
+</head>
+<body>
+    <div class="backdrop-layer" aria-hidden="true"></div>
+    <a class="back-home" href="../index.html">返回博客</a>
+    <div class="admin-login-page">
+        <form class="admin-login-card" id="login-form" autocomplete="on">
+            <div class="login-mark">管</div>
+            <div class="eyebrow">管理员入口</div>
+            <h1>登录管理后台</h1>
+            <p>请输入管理员账号与密码，设置将在这里统一管理。</p>
+
+            <div class="login-field">
+                <label for="login-username">账号</label>
+                <input type="text" id="login-username" autocomplete="username" spellcheck="false">
+            </div>
+            <div class="login-field">
+                <label for="login-password">密码</label>
+                <input type="password" id="login-password" autocomplete="current-password" spellcheck="false">
+            </div>
+            <label class="login-remember">
+                <input type="checkbox" id="login-remember">
+                <span>保持登录</span>
+            </label>
+
+            <button class="btn btn-primary" type="submit">进入后台</button>
+            <p class="login-error" id="login-error" hidden>账号或密码不正确</p>
+        </form>
+    </div>
+    <script src="../script.js"></script>
+    <script src="auth.js"></script>
+    <script src="login.js"></script>
+</body>
+</html>
