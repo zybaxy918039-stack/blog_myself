@@ -1,6 +1,8 @@
 const APPEARANCE_KEY = "blogAppearance";
 
 const DEFAULT_APPEARANCE = {
+  siteTitle: "雾中书桌",
+  siteSubtitle: "个人网络日志",
   image: 'url("assets/bg-mist-morning.jpg")',
   backdropOpacity: 0.78,
   backdropBlur: 18,
@@ -8,6 +10,15 @@ const DEFAULT_APPEARANCE = {
   panelBlur: 12,
   contentWidth: 1100
 };
+
+function applySiteIdentity(title, subtitle) {
+  document.querySelectorAll("[data-site-title]").forEach((element) => {
+    element.textContent = title;
+  });
+  document.querySelectorAll("[data-site-subtitle]").forEach((element) => {
+    element.textContent = subtitle;
+  });
+}
 
 function getSavedAppearance() {
   try {
@@ -42,6 +53,10 @@ function applyAppearance() {
   root.style.setProperty(
     "--content-width",
     `${saved.contentWidth ?? DEFAULT_APPEARANCE.contentWidth}px`
+  );
+  applySiteIdentity(
+    saved.siteTitle ?? DEFAULT_APPEARANCE.siteTitle,
+    saved.siteSubtitle ?? DEFAULT_APPEARANCE.siteSubtitle
   );
 }
 
@@ -84,6 +99,8 @@ function initFilters() {
 }
 
 function initAppearanceControls() {
+  const siteTitleInput = document.getElementById("site-title");
+  const siteSubtitleInput = document.getElementById("site-subtitle");
   const imageInput = document.getElementById("bg-url");
   const backdropOpacityRange = document.getElementById("backdrop-opacity-range");
   const backdropBlurRange = document.getElementById("backdrop-blur-range");
@@ -97,6 +114,8 @@ function initAppearanceControls() {
   const contentWidthValue = document.getElementById("content-width-value");
   const statusLine = document.getElementById("status-line");
   if (
+    !siteTitleInput ||
+    !siteSubtitleInput ||
     !imageInput ||
     !backdropOpacityRange ||
     !backdropBlurRange ||
@@ -106,6 +125,8 @@ function initAppearanceControls() {
   ) return;
 
   const saved = getSavedAppearance();
+  siteTitleInput.value = saved.siteTitle ?? DEFAULT_APPEARANCE.siteTitle;
+  siteSubtitleInput.value = saved.siteSubtitle ?? DEFAULT_APPEARANCE.siteSubtitle;
   if (saved.image) {
     const match = saved.image.match(/url\(["']?(.+?)["']?\)/);
     if (match) imageInput.value = match[1];
@@ -143,9 +164,15 @@ function initAppearanceControls() {
     root.style.setProperty("--panel-opacity", String(panelOpacityRange.value));
     root.style.setProperty("--panel-blur", `${panelBlurRange.value}px`);
     root.style.setProperty("--content-width", `${contentWidthRange.value}px`);
+    applySiteIdentity(
+      siteTitleInput.value.trim() || DEFAULT_APPEARANCE.siteTitle,
+      siteSubtitleInput.value.trim() || DEFAULT_APPEARANCE.siteSubtitle
+    );
     syncLabels();
   };
 
+  siteTitleInput.addEventListener("input", previewFromInputs);
+  siteSubtitleInput.addEventListener("input", previewFromInputs);
   imageInput.addEventListener("input", previewFromInputs);
   backdropOpacityRange.addEventListener("input", previewFromInputs);
   backdropBlurRange.addEventListener("input", previewFromInputs);
@@ -166,6 +193,8 @@ function initAppearanceControls() {
   if (saveButton) {
     saveButton.addEventListener("click", () => {
       const appearance = {
+        siteTitle: siteTitleInput.value.trim() || DEFAULT_APPEARANCE.siteTitle,
+        siteSubtitle: siteSubtitleInput.value.trim() || DEFAULT_APPEARANCE.siteSubtitle,
         image: imageInput.value.trim()
           ? `url("${imageInput.value.trim()}")`
           : DEFAULT_APPEARANCE.image,
@@ -194,6 +223,9 @@ function initAppearanceControls() {
         // Ignore unavailable storage.
       }
       applyAppearance();
+      siteTitleInput.value = DEFAULT_APPEARANCE.siteTitle;
+      siteSubtitleInput.value = DEFAULT_APPEARANCE.siteSubtitle;
+      applySiteIdentity(DEFAULT_APPEARANCE.siteTitle, DEFAULT_APPEARANCE.siteSubtitle);
       imageInput.value = "assets/bg-mist-morning.jpg";
       backdropOpacityRange.value = DEFAULT_APPEARANCE.backdropOpacity;
       backdropBlurRange.value = DEFAULT_APPEARANCE.backdropBlur;
