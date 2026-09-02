@@ -84,9 +84,65 @@
 
             <section id="writing" class="admin-section">
                 <h2>文章管理</h2>
-                <p>后续可以在这里维护 Markdown 文章与标签。目前写作入口仍从博客侧边栏进入。</p>
-                <div class="admin-actions">
-                    <a class="btn btn-primary" href="../edit.html">打开写作页</a>
+                <div class="editor-container">
+                    <div class="editor-header">
+                        <div class="input-group">
+                            <label for="post-title">文章标题</label>
+                            <input type="text" id="post-title" placeholder="输入文章标题..." autocomplete="off">
+                        </div>
+                        <div class="input-group">
+                            <label for="post-category">分类</label>
+                            <select id="post-category">
+                                <option value="随笔">随笔</option>
+                                <option value="小说">小说</option>
+                                <option value="技术">技术</option>
+                                <option value="项目">项目</option>
+                            </select>
+                        </div>
+                        <div class="input-group tags-input">
+                            <label for="tags-input">标签</label>
+                            <div class="tags-container">
+                                <input type="text" id="tags-input" placeholder="输入标签，按回车添加..." autocomplete="off">
+                                <div class="tags-list" id="tags-list"></div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="editor-content">
+                        <div class="editor-pane">
+                            <div class="pane-header">
+                                <span>Markdown 编辑器</span>
+                                <div class="toolbar">
+                                    <button class="tool-btn" onclick="formatText('bold')" title="加粗" type="button">B</button>
+                                    <button class="tool-btn" onclick="formatText('italic')" title="斜体" type="button">I</button>
+                                    <button class="tool-btn" onclick="formatText('header')" title="标题" type="button">H1</button>
+                                    <button class="tool-btn" onclick="insertImage()" title="插入图片" type="button">图</button>
+                                    <button class="tool-btn" onclick="insertBlockquote()" title="引用" type="button">引</button>
+                                    <button class="tool-btn" onclick="insertList()" title="列表" type="button">列</button>
+                                </div>
+                            </div>
+                            <textarea id="markdown-editor" placeholder="# 文章标题&#10;&#10;开始你的创作..." spellcheck="false"></textarea>
+                        </div>
+                        <div class="preview-pane">
+                            <div class="pane-header">
+                                <span>实时预览</span>
+                            </div>
+                            <div class="preview-content" id="markdown-preview">
+                                <h1>实时预览</h1>
+                                <p>开始编辑 Markdown 内容，右侧将实时显示效果。</p>
+                                <blockquote>写作是一种表达，分享是一种快乐。</blockquote>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="editor-footer">
+                        <button class="btn btn-secondary" id="save-btn" title="保存为草稿" type="button">
+                            <span>保存草稿</span>
+                        </button>
+                        <button class="btn btn-primary" id="publish-btn" title="发布文章" type="button">
+                            <span>发布文章</span>
+                        </button>
+                    </div>
                 </div>
             </section>
 
@@ -106,5 +162,6 @@
     <script src="../script.js"></script>
     <script src="auth.js"></script>
     <script src="admin.js"></script>
+    <script src="../edit.js"></script>
 </body>
 </html>
