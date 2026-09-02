@@ -2,8 +2,11 @@ const APPEARANCE_KEY = "blogAppearance";
 
 const DEFAULT_APPEARANCE = {
   image: 'url("assets/bg-mist-morning.jpg")',
-  opacity: 0.78,
-  blur: 18
+  backdropOpacity: 0.78,
+  backdropBlur: 18,
+  panelOpacity: 0.82,
+  panelBlur: 12,
+  contentWidth: 1100
 };
 
 function getSavedAppearance() {
@@ -20,8 +23,26 @@ function applyAppearance() {
   const saved = getSavedAppearance();
   const root = document.documentElement;
   root.style.setProperty("--bg-image", saved.image || DEFAULT_APPEARANCE.image);
-  root.style.setProperty("--glass-opacity", String(saved.opacity ?? DEFAULT_APPEARANCE.opacity));
-  root.style.setProperty("--glass-blur", `${saved.blur ?? DEFAULT_APPEARANCE.blur}px`);
+  root.style.setProperty(
+    "--backdrop-opacity",
+    String(saved.backdropOpacity ?? saved.opacity ?? DEFAULT_APPEARANCE.backdropOpacity)
+  );
+  root.style.setProperty(
+    "--backdrop-blur",
+    `${saved.backdropBlur ?? saved.blur ?? DEFAULT_APPEARANCE.backdropBlur}px`
+  );
+  root.style.setProperty(
+    "--panel-opacity",
+    String(saved.panelOpacity ?? saved.opacity ?? DEFAULT_APPEARANCE.panelOpacity)
+  );
+  root.style.setProperty(
+    "--panel-blur",
+    `${saved.panelBlur ?? saved.blur ?? DEFAULT_APPEARANCE.panelBlur}px`
+  );
+  root.style.setProperty(
+    "--content-width",
+    `${saved.contentWidth ?? DEFAULT_APPEARANCE.contentWidth}px`
+  );
 }
 
 function addRipple(target, event) {
@@ -64,24 +85,50 @@ function initFilters() {
 
 function initAppearanceControls() {
   const imageInput = document.getElementById("bg-url");
-  const opacityRange = document.getElementById("opacity-range");
-  const blurRange = document.getElementById("blur-range");
-  const opacityValue = document.getElementById("opacity-value");
-  const blurValue = document.getElementById("blur-value");
+  const backdropOpacityRange = document.getElementById("backdrop-opacity-range");
+  const backdropBlurRange = document.getElementById("backdrop-blur-range");
+  const panelOpacityRange = document.getElementById("panel-opacity-range");
+  const panelBlurRange = document.getElementById("panel-blur-range");
+  const contentWidthRange = document.getElementById("content-width-range");
+  const backdropOpacityValue = document.getElementById("backdrop-opacity-value");
+  const backdropBlurValue = document.getElementById("backdrop-blur-value");
+  const panelOpacityValue = document.getElementById("panel-opacity-value");
+  const panelBlurValue = document.getElementById("panel-blur-value");
+  const contentWidthValue = document.getElementById("content-width-value");
   const statusLine = document.getElementById("status-line");
-  if (!imageInput || !opacityRange || !blurRange) return;
+  if (
+    !imageInput ||
+    !backdropOpacityRange ||
+    !backdropBlurRange ||
+    !panelOpacityRange ||
+    !panelBlurRange ||
+    !contentWidthRange
+  ) return;
 
   const saved = getSavedAppearance();
   if (saved.image) {
     const match = saved.image.match(/url\(["']?(.+?)["']?\)/);
     if (match) imageInput.value = match[1];
   }
-  opacityRange.value = saved.opacity ?? DEFAULT_APPEARANCE.opacity;
-  blurRange.value = saved.blur ?? DEFAULT_APPEARANCE.blur;
+  backdropOpacityRange.value =
+    saved.backdropOpacity ?? saved.opacity ?? DEFAULT_APPEARANCE.backdropOpacity;
+  backdropBlurRange.value =
+    saved.backdropBlur ?? saved.blur ?? DEFAULT_APPEARANCE.backdropBlur;
+  panelOpacityRange.value =
+    saved.panelOpacity ?? saved.opacity ?? DEFAULT_APPEARANCE.panelOpacity;
+  panelBlurRange.value = saved.panelBlur ?? saved.blur ?? DEFAULT_APPEARANCE.panelBlur;
+  contentWidthRange.value = saved.contentWidth ?? DEFAULT_APPEARANCE.contentWidth;
 
   const syncLabels = () => {
-    if (opacityValue) opacityValue.textContent = `${Math.round(opacityRange.value * 100)}%`;
-    if (blurValue) blurValue.textContent = `${blurRange.value}px`;
+    if (backdropOpacityValue) {
+      backdropOpacityValue.textContent = `${Math.round(backdropOpacityRange.value * 100)}%`;
+    }
+    if (backdropBlurValue) backdropBlurValue.textContent = `${backdropBlurRange.value}px`;
+    if (panelOpacityValue) {
+      panelOpacityValue.textContent = `${Math.round(panelOpacityRange.value * 100)}%`;
+    }
+    if (panelBlurValue) panelBlurValue.textContent = `${panelBlurRange.value}px`;
+    if (contentWidthValue) contentWidthValue.textContent = `${contentWidthRange.value}px`;
   };
   syncLabels();
 
@@ -91,14 +138,20 @@ function initAppearanceControls() {
       ? `url("${imageInput.value.trim()}")`
       : DEFAULT_APPEARANCE.image;
     root.style.setProperty("--bg-image", image);
-    root.style.setProperty("--glass-opacity", String(opacityRange.value));
-    root.style.setProperty("--glass-blur", `${blurRange.value}px`);
+    root.style.setProperty("--backdrop-opacity", String(backdropOpacityRange.value));
+    root.style.setProperty("--backdrop-blur", `${backdropBlurRange.value}px`);
+    root.style.setProperty("--panel-opacity", String(panelOpacityRange.value));
+    root.style.setProperty("--panel-blur", `${panelBlurRange.value}px`);
+    root.style.setProperty("--content-width", `${contentWidthRange.value}px`);
     syncLabels();
   };
 
   imageInput.addEventListener("input", previewFromInputs);
-  opacityRange.addEventListener("input", previewFromInputs);
-  blurRange.addEventListener("input", previewFromInputs);
+  backdropOpacityRange.addEventListener("input", previewFromInputs);
+  backdropBlurRange.addEventListener("input", previewFromInputs);
+  panelOpacityRange.addEventListener("input", previewFromInputs);
+  panelBlurRange.addEventListener("input", previewFromInputs);
+  contentWidthRange.addEventListener("input", previewFromInputs);
 
   document.querySelectorAll(".preset-card[data-image]").forEach((card) => {
     card.addEventListener("click", () => {
@@ -116,8 +169,11 @@ function initAppearanceControls() {
         image: imageInput.value.trim()
           ? `url("${imageInput.value.trim()}")`
           : DEFAULT_APPEARANCE.image,
-        opacity: Number(opacityRange.value),
-        blur: Number(blurRange.value)
+        backdropOpacity: Number(backdropOpacityRange.value),
+        backdropBlur: Number(backdropBlurRange.value),
+        panelOpacity: Number(panelOpacityRange.value),
+        panelBlur: Number(panelBlurRange.value),
+        contentWidth: Number(contentWidthRange.value)
       };
       try {
         localStorage.setItem(APPEARANCE_KEY, JSON.stringify(appearance));
@@ -139,8 +195,11 @@ function initAppearanceControls() {
       }
       applyAppearance();
       imageInput.value = "assets/bg-mist-morning.jpg";
-      opacityRange.value = DEFAULT_APPEARANCE.opacity;
-      blurRange.value = DEFAULT_APPEARANCE.blur;
+      backdropOpacityRange.value = DEFAULT_APPEARANCE.backdropOpacity;
+      backdropBlurRange.value = DEFAULT_APPEARANCE.backdropBlur;
+      panelOpacityRange.value = DEFAULT_APPEARANCE.panelOpacity;
+      panelBlurRange.value = DEFAULT_APPEARANCE.panelBlur;
+      contentWidthRange.value = DEFAULT_APPEARANCE.contentWidth;
       syncLabels();
       document.querySelectorAll(".preset-card").forEach((card) => {
         card.classList.toggle("active", card.dataset.image === "assets/bg-mist-morning.jpg");
