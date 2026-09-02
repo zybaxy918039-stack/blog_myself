@@ -2,6 +2,7 @@
 <html lang="zh-CN">
 <head>
     <meta charset="UTF-8">
+    <meta http-equiv="refresh" content="0;url=essays.html">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>文章墙 - 雾中书桌</title>
     <meta name="description" content="把每一篇文章挂在这里，按自己的节奏阅读。">
@@ -35,18 +36,17 @@
                 <p>每一块相框里，都是一段留在纸上的时间。</p>
             </div>
 
-            <section class="posts-section">
-                <div class="section-header">
-                    <h2>全部文章</h2>
-                    <div class="filters">
-                        <button class="filter-btn active" data-filter="all">全部</button>
-                        <button class="filter-btn" data-filter="随笔">随笔</button>
-                        <button class="filter-btn" data-filter="技术">技术</button>
-                        <button class="filter-btn" data-filter="小说">小说</button>
+            <section class="category-stack" aria-label="内容板块">
+                <section class="category-board" id="essays">
+                    <div class="board-head">
+                        <div>
+                            <div class="eyebrow">随笔</div>
+                            <h2>随笔</h2>
+                        </div>
+                        <span class="board-count">1 篇</span>
                     </div>
-                </div>
 
-                <div class="posts-grid">
+                    <div class="posts-grid">
                     <article class="post-card" data-categories="随笔">
                         <a href="posts/post1.html" class="post-link">
                             <div class="post-badge">随笔</div>
@@ -61,7 +61,30 @@
                             </div>
                         </a>
                     </article>
+                    </div>
+                </section>
 
+                <section class="category-board" id="fiction">
+                    <div class="board-head">
+                        <div>
+                            <div class="eyebrow">小说</div>
+                            <h2>小说</h2>
+                        </div>
+                        <span class="board-count">0 篇</span>
+                    </div>
+                    <div class="empty-board">小说草稿暂时还没有挂出来</div>
+                </section>
+
+                <section class="category-board" id="tech">
+                    <div class="board-head">
+                        <div>
+                            <div class="eyebrow">技术</div>
+                            <h2>技术</h2>
+                        </div>
+                        <span class="board-count">1 篇</span>
+                    </div>
+
+                    <div class="posts-grid">
                     <article class="post-card" data-categories="技术">
                         <a href="posts/post2.html" class="post-link">
                             <div class="post-badge">技术</div>
@@ -76,7 +99,33 @@
                             </div>
                         </a>
                     </article>
-                </div>
+                    </div>
+                </section>
+
+                <section class="ai-art-board" id="ai-art">
+                    <div class="board-head">
+                        <div>
+                            <div class="eyebrow">AI 绘图</div>
+                            <h2>AI 绘图</h2>
+                        </div>
+                        <span class="board-count">待整理</span>
+                    </div>
+
+                    <div class="ai-art-grid">
+                        <div class="ai-art-card empty">
+                            <span class="ai-art-symbol">AI</span>
+                            <p>待放入作品</p>
+                        </div>
+                        <div class="ai-art-card empty">
+                            <span class="ai-art-symbol">AI</span>
+                            <p>待放入作品</p>
+                        </div>
+                        <a class="ai-art-card ai-art-add" href="admin/index.html">
+                            <span class="plus-icon">+</span>
+                            <p>管理绘图作品</p>
+                        </a>
+                    </div>
+                </section>
             </section>
 
             <footer class="site-footer">

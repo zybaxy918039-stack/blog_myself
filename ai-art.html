@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AI 绘图 - 雾中书桌</title>
+    <meta name="description" content="AI 绘图作品和实验">
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div class="backdrop-layer" aria-hidden="true"></div>
+    <div class="page-shell">
+        <header class="site-header">
+            <a class="brand" href="index.html">
+                <span class="brand-mark">书</span>
+                <span class="brand-title">
+                    <span data-site-title>雾中书桌</span>
+                    <span class="brand-sub" data-site-subtitle>个人网络日志</span>
+                </span>
+            </a>
+            <nav class="site-nav" aria-label="主导航">
+                <a href="index.html" class="nav-bubble">首页</a>
+                <a href="essays.html" class="nav-bubble">随笔</a>
+                <a href="fiction.html" class="nav-bubble">小说</a>
+                <a href="tech.html" class="nav-bubble">技术</a>
+                <a href="ai-art.html" class="nav-bubble active">AI 绘图</a>
+                <a href="about.html" class="nav-bubble">关于</a>
+                <a href="admin/index.html" class="nav-bubble">管理</a>
+            </nav>
+        </header>
+
+        <main class="glass-panel fade-in">
+            <div class="page-head">
+                <div>
+                    <div class="eyebrow">AI 绘图</div>
+                    <h1>AI 绘图</h1>
+                </div>
+                <p>把生成图像的实验整理成一个小画廊。</p>
+            </div>
+
+            <section class="ai-art-board" id="ai-art">
+                <div class="board-head">
+                    <div>
+                        <div class="eyebrow">AI 绘图</div>
+                        <h2>作品墙</h2>
+                    </div>
+                    <span class="board-count">待整理</span>
+                </div>
+
+                <div class="ai-art-grid">
+                    <div class="ai-art-card empty">
+                        <span class="ai-art-symbol">AI</span>
+                        <p>待放入作品</p>
+                    </div>
+                    <div class="ai-art-card empty">
+                        <span class="ai-art-symbol">AI</span>
+                        <p>待放入作品</p>
+                    </div>
+                    <a class="ai-art-card ai-art-add" href="admin/index.html">
+                        <span class="plus-icon">+</span>
+                        <p>管理绘图作品</p>
+                    </a>
+                </div>
+            </section>
+
+            <footer class="site-footer">
+                <p>&copy; 2026 雾中书桌</p>
+            </footer>
+        </main>
+    </div>
+    <script src="script.js"></script>
+</body>
+</html>
