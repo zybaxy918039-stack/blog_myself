@@ -228,6 +228,7 @@ body {
   width: 100%;
   max-width: var(--content-width);
   grid-area: main;
+  justify-self: center;
   padding: clamp(24px, 4.5vw, 52px);
   background: var(--panel-surface);
   border: 1px solid var(--line-light);
