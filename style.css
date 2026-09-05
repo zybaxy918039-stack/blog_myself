@@ -273,6 +273,22 @@ body {
   grid-column: 1 / -1;
 }
 
+.page-shell > main.glass-panel {
+  width: min(calc(100% - clamp(128px, 30vw, 720px)), 1380px);
+  max-width: 1380px;
+  grid-area: auto;
+  justify-self: center;
+  margin: 24px auto 0;
+  padding: clamp(24px, 4.5vw, 52px) 0;
+  background: transparent;
+  border: 0;
+  border-radius: 0;
+  box-shadow: none;
+  -webkit-backdrop-filter: none;
+  backdrop-filter: none;
+  overflow: visible;
+}
+
 .page-head {
   display: flex;
   align-items: flex-end;
@@ -1627,9 +1643,10 @@ input[type="range"] {
 
 /* Home overview */
 .home-layout {
-  width: min(100%, var(--content-width));
+  width: min(100%, 1520px);
+  max-width: 100%;
   margin: 28px auto 0;
-  padding: clamp(16px, 4vw, 40px) 0 18px;
+  padding: clamp(16px, 4vw, 40px) 24px 18px;
 }
 
 .home-hero-layout {
@@ -2259,5 +2276,13 @@ input[type="range"] {
   .post-card,
   .add-new-post-card {
     min-height: 190px;
+  }
+}
+
+@media (max-width: 700px) {
+  .page-shell > main.glass-panel {
+    width: 100%;
+    margin: 14px 0 0;
+    padding: 22px 18px;
   }
 }
