@@ -1,4 +1,6 @@
 const APPEARANCE_KEY = "blogAppearance";
+const HOME_PROFILE_KEY = "blogHomeProfile";
+const MUSIC_KEY = "blogMusic";
 
 const DEFAULT_APPEARANCE = {
   siteTitle: "雾中书桌",
@@ -9,6 +11,19 @@ const DEFAULT_APPEARANCE = {
   panelOpacity: 0.82,
   panelBlur: 12,
   contentWidth: 1100
+};
+
+const DEFAULT_HOME_PROFILE = {
+  avatar: "书",
+  name: "博主",
+  bio: "热爱技术和创作，用这个博客记录生活点滴、技术分享和未完的故事。",
+  signature: "把想法留在纸上。"
+};
+
+const DEFAULT_MUSIC = {
+  title: "未设置音乐",
+  artist: "",
+  url: ""
 };
 
 function applySiteIdentity(title, subtitle) {
@@ -27,6 +42,67 @@ function getSavedAppearance() {
     return JSON.parse(raw);
   } catch (error) {
     return {};
+  }
+}
+
+function getSavedHomeContent() {
+  try {
+    const rawProfile = localStorage.getItem(HOME_PROFILE_KEY);
+    const rawMusic = localStorage.getItem(MUSIC_KEY);
+    return {
+      profile: rawProfile ? JSON.parse(rawProfile) : {},
+      music: rawMusic ? JSON.parse(rawMusic) : {}
+    };
+  } catch (error) {
+    return { profile: {}, music: {} };
+  }
+}
+
+function applyHomeContent() {
+  const saved = getSavedHomeContent();
+  const profile = {
+    ...DEFAULT_HOME_PROFILE,
+    ...saved.profile
+  };
+  const music = {
+    ...DEFAULT_MUSIC,
+    ...saved.music
+  };
+
+  const avatar = document.querySelector("[data-profile-avatar]");
+  const name = document.querySelector("[data-profile-name]");
+  const bio = document.querySelector("[data-profile-bio]");
+  const signature = document.querySelector("[data-profile-signature]");
+  if (avatar) avatar.textContent = profile.avatar;
+  if (name) name.textContent = profile.name;
+  if (bio) bio.textContent = profile.bio;
+  if (signature) signature.textContent = profile.signature;
+
+  const title = document.querySelector("[data-music-title]");
+  const artist = document.querySelector("[data-music-artist]");
+  const empty = document.querySelector("[data-music-empty]");
+  const audio = document.getElementById("home-audio-player");
+  const musicCard = document.querySelector(".home-music-card");
+  if (title) title.textContent = music.title || DEFAULT_MUSIC.title;
+  if (artist) {
+    artist.textContent = music.artist || (music.url ? "未知歌手" : "在管理后台添加音乐链接后可用");
+  }
+
+  const hasMusic = Boolean(music.url && String(music.url).trim());
+  if (musicCard) musicCard.classList.toggle("has-music", hasMusic);
+  if (empty) {
+    empty.textContent = hasMusic
+      ? "把喜欢的音乐放在这里，作为每次点开博客时的小小背景。"
+      : "在管理后台添加音乐链接后，这里就可以播放。";
+  }
+  if (audio) {
+    if (hasMusic) {
+      audio.src = String(music.url).trim();
+      audio.load();
+    } else {
+      audio.removeAttribute("src");
+      audio.load();
+    }
   }
 }
 
@@ -241,11 +317,90 @@ function initAppearanceControls() {
   }
 }
 
+function initHomeContentControls() {
+  const avatarInput = document.getElementById("profile-avatar-text");
+  const nameInput = document.getElementById("profile-name");
+  const bioInput = document.getElementById("profile-bio");
+  const signatureInput = document.getElementById("profile-signature");
+  const musicTitleInput = document.getElementById("music-title");
+  const musicArtistInput = document.getElementById("music-artist");
+  const musicUrlInput = document.getElementById("music-url");
+  const statusLine = document.getElementById("home-content-status");
+  if (
+    !avatarInput ||
+    !nameInput ||
+    !bioInput ||
+    !signatureInput ||
+    !musicTitleInput ||
+    !musicArtistInput ||
+    !musicUrlInput
+  ) return;
+
+  const saved = getSavedHomeContent();
+  const profile = { ...DEFAULT_HOME_PROFILE, ...saved.profile };
+  const music = { ...DEFAULT_MUSIC, ...saved.music };
+
+  avatarInput.value = profile.avatar;
+  nameInput.value = profile.name;
+  bioInput.value = profile.bio;
+  signatureInput.value = profile.signature;
+  musicTitleInput.value = music.title;
+  musicArtistInput.value = music.artist;
+  musicUrlInput.value = music.url;
+
+  const saveButton = document.getElementById("save-home-content");
+  if (saveButton) {
+    saveButton.addEventListener("click", () => {
+      const nextProfile = {
+        avatar: avatarInput.value.trim() || DEFAULT_HOME_PROFILE.avatar,
+        name: nameInput.value.trim() || DEFAULT_HOME_PROFILE.name,
+        bio: bioInput.value.trim() || DEFAULT_HOME_PROFILE.bio,
+        signature: signatureInput.value.trim() || DEFAULT_HOME_PROFILE.signature
+      };
+      const nextMusic = {
+        title: musicTitleInput.value.trim() || DEFAULT_MUSIC.title,
+        artist: musicArtistInput.value.trim(),
+        url: musicUrlInput.value.trim()
+      };
+
+      try {
+        localStorage.setItem(HOME_PROFILE_KEY, JSON.stringify(nextProfile));
+        localStorage.setItem(MUSIC_KEY, JSON.stringify(nextMusic));
+        if (statusLine) statusLine.textContent = "首页个人资料与音乐已保存";
+      } catch (error) {
+        if (statusLine) statusLine.textContent = "浏览器未允许保存";
+      }
+    });
+  }
+
+  const resetButton = document.getElementById("reset-home-content");
+  if (resetButton) {
+    resetButton.addEventListener("click", () => {
+      try {
+        localStorage.removeItem(HOME_PROFILE_KEY);
+        localStorage.removeItem(MUSIC_KEY);
+      } catch (error) {
+        // Ignore unavailable storage.
+      }
+      avatarInput.value = DEFAULT_HOME_PROFILE.avatar;
+      nameInput.value = DEFAULT_HOME_PROFILE.name;
+      bioInput.value = DEFAULT_HOME_PROFILE.bio;
+      signatureInput.value = DEFAULT_HOME_PROFILE.signature;
+      musicTitleInput.value = DEFAULT_MUSIC.title;
+      musicArtistInput.value = DEFAULT_MUSIC.artist;
+      musicUrlInput.value = DEFAULT_MUSIC.url;
+      if (statusLine) statusLine.textContent = "已恢复首页默认内容";
+    });
+  }
+}
+
 document.addEventListener("DOMContentLoaded", function () {
   applyAppearance();
+  applyHomeContent();
   initRipple();
   initFilters();
   initAppearanceControls();
+  initHomeContentControls();
 
   document.querySelectorAll('a[href^="#"]').forEach((anchor) => {
     anchor.addEventListener("click", (event) => {

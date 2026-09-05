@@ -19,6 +19,7 @@
             <nav class="admin-nav" aria-label="后台导航">
                 <a class="admin-nav-item active" href="#appearance">外观设置</a>
                 <a class="admin-nav-item" href="#writing">文章管理</a>
+                <a class="admin-nav-item" href="#library">读书管理</a>
                 <a class="admin-nav-item" href="#deploy">部署设置</a>
             </nav>
             <button class="btn btn-secondary" id="logout-btn" type="button">退出登录</button>
@@ -49,6 +50,51 @@
                                 <input type="text" id="site-subtitle" value="个人网络日志" autocomplete="off">
                             </div>
                         </div>
+                    </section>
+
+                    <section class="setting-block">
+                        <h3>首页个人资料</h3>
+                        <div class="control-grid home-profile-controls">
+                            <div class="control-group">
+                                <label for="profile-name">昵称</label>
+                                <input type="text" id="profile-name" value="博主" autocomplete="off">
+                            </div>
+                            <div class="control-group">
+                                <label for="profile-avatar-text">头像文字</label>
+                                <input type="text" id="profile-avatar-text" value="书" autocomplete="off">
+                            </div>
+                            <div class="control-group">
+                                <label for="profile-signature">签名</label>
+                                <input type="text" id="profile-signature" value="把想法留在纸上。" autocomplete="off">
+                            </div>
+                            <div class="control-group control-group-wide">
+                                <label for="profile-bio">个人介绍</label>
+                                <input type="text" id="profile-bio" value="热爱技术和创作，用这个博客记录生活点滴、技术分享和未完的故事。" autocomplete="off">
+                            </div>
+                        </div>
+                    </section>
+
+                    <section class="setting-block">
+                        <h3>首页音乐</h3>
+                        <div class="control-grid home-music-controls">
+                            <div class="control-group">
+                                <label for="music-title">歌曲名</label>
+                                <input type="text" id="music-title" value="未设置音乐" autocomplete="off">
+                            </div>
+                            <div class="control-group">
+                                <label for="music-artist">歌手</label>
+                                <input type="text" id="music-artist" placeholder="例如：Ludovico Einaudi" autocomplete="off">
+                            </div>
+                            <div class="control-group control-group-wide">
+                                <label for="music-url">音乐链接</label>
+                                <input type="url" id="music-url" placeholder="https://example.com/song.mp3" autocomplete="url" spellcheck="false">
+                            </div>
+                        </div>
+                        <div class="appearance-actions">
+                            <button class="btn btn-secondary" id="save-home-content" type="button">保存首页内容</button>
+                            <button class="btn btn-secondary" id="reset-home-content" type="button">恢复默认</button>
+                        </div>
+                        <div class="status-line" id="home-content-status" style="margin-top:14px">当前保存方式：本机浏览器</div>
                     </section>
 
                     <section class="setting-block">
@@ -182,6 +228,89 @@
                 </div>
             </section>
 
+            <section id="library" class="admin-section">
+                <h2>读书管理</h2>
+                <p>在这里维护本周书单，并为每本书创建独立摘录分区。</p>
+
+                <div class="library-manager">
+                    <section class="setting-block">
+                        <div class="setting-block-head">
+                            <h3>本周书单</h3>
+                            <span class="board-count">书单会显示在首页和读书区</span>
+                        </div>
+                        <form id="weekly-book-form" class="library-form">
+                            <div class="control-grid">
+                                <div class="control-group">
+                                    <label for="weekly-title">书名</label>
+                                    <input type="text" id="weekly-title" placeholder="例如：置身事内" autocomplete="off" required>
+                                </div>
+                                <div class="control-group">
+                                    <label for="weekly-author">作者</label>
+                                    <input type="text" id="weekly-author" placeholder="例如：兰小欢" autocomplete="off">
+                                </div>
+                                <div class="control-group">
+                                    <label for="weekly-progress">阅读进度</label>
+                                    <select id="weekly-progress">
+                                        <option value="未开始">未开始</option>
+                                        <option value="进行中" selected>进行中</option>
+                                        <option value="已读完">已读完</option>
+                                    </select>
+                                </div>
+                                <div class="control-group control-group-wide">
+                                    <label for="weekly-reason">为什么这周读</label>
+                                    <input type="text" id="weekly-reason" placeholder="写一句计划或推荐理由" autocomplete="off">
+                                </div>
+                            </div>
+                            <button class="btn btn-primary" type="submit">加入本周书单</button>
+                        </form>
+                        <div id="weekly-book-list" class="library-admin-list"></div>
+                    </section>
+
+                    <section class="setting-block">
+                        <div class="setting-block-head">
+                            <h3>书评分区</h3>
+                            <span class="board-count">每本书一个分区</span>
+                        </div>
+                        <form id="book-form" class="library-form">
+                            <div class="control-grid">
+                                <div class="control-group">
+                                    <label for="review-book-title">书名</label>
+                                    <input type="text" id="review-book-title" placeholder="例如：百年孤独" autocomplete="off" required>
+                                </div>
+                                <div class="control-group">
+                                    <label for="review-book-author">作者</label>
+                                    <input type="text" id="review-book-author" placeholder="例如：加西亚·马尔克斯" autocomplete="off">
+                                </div>
+                                <div class="control-group control-group-wide">
+                                    <label for="review-book-cover">封面图片链接</label>
+                                    <input type="url" id="review-book-cover" placeholder="可选，暂时留空也可以" autocomplete="off">
+                                </div>
+                            </div>
+                            <button class="btn btn-primary" type="submit">创建书评分区</button>
+                        </form>
+
+                        <form id="quote-form" class="library-form quote-form">
+                            <div class="control-grid">
+                                <div class="control-group">
+                                    <label for="quote-book-select">选择书籍</label>
+                                    <select id="quote-book-select"></select>
+                                </div>
+                                <div class="control-group control-group-wide">
+                                    <label for="quote-text">句子</label>
+                                    <textarea id="quote-text" rows="3" placeholder="粘贴想记录的原句..." required></textarea>
+                                </div>
+                                <div class="control-group control-group-wide">
+                                    <label for="quote-note">短评</label>
+                                    <textarea id="quote-note" rows="2" placeholder="写一句自己的理解或感受..."></textarea>
+                                </div>
+                            </div>
+                            <button class="btn btn-secondary" type="submit">添加句子与短评</button>
+                        </form>
+                        <div id="book-review-list" class="library-admin-list library-admin-list-stacked"></div>
+                    </section>
+                </div>
+            </section>
+
             <section id="deploy" class="admin-section">
                 <h2>部署设置</h2>
                 <p>后续将在这里展示 Cloudflare Pages、GitHub Actions、D1 与 R2 的连接状态。</p>
@@ -195,6 +324,7 @@
             </footer>
         </main>
     </div>
+    <script src="../library.js"></script>
     <script src="../script.js"></script>
     <script src="auth.js"></script>
     <script src="admin.js"></script>

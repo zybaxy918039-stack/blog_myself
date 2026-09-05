@@ -3,11 +3,11 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>小说 - 雾中书桌</title>
-    <meta name="description" content="小说草稿和故事片段">
+    <title>读书 - 雾中书桌</title>
+    <meta name="description" content="本周书单、书籍摘录和短评">
     <link rel="stylesheet" href="style.css">
 </head>
-<body>
+<body class="books-page">
     <div class="backdrop-layer" aria-hidden="true"></div>
     <div class="page-shell">
         <header class="site-header">
@@ -21,10 +21,10 @@
             <nav class="site-nav" aria-label="主导航">
                 <a href="index.html" class="nav-bubble">首页</a>
                 <a href="essays.html" class="nav-bubble">随笔</a>
-                <a href="fiction.html" class="nav-bubble active">小说</a>
+                <a href="fiction.html" class="nav-bubble">小说</a>
                 <a href="tech.html" class="nav-bubble">技术</a>
                 <a href="ai-art.html" class="nav-bubble">AI 绘图</a>
-                <a href="books.html" class="nav-bubble">读书</a>
+                <a href="books.html" class="nav-bubble active">读书</a>
                 <a href="about.html" class="nav-bubble">关于</a>
                 <a href="admin/index.html" class="nav-bubble">管理</a>
             </nav>
@@ -33,28 +33,40 @@
         <main class="glass-panel fade-in">
             <div class="page-head">
                 <div>
-                    <div class="eyebrow">小说</div>
-                    <h1>小说</h1>
+                    <div class="eyebrow">读书</div>
+                    <h1>读书与摘录</h1>
                 </div>
-                <p>故事草稿、角色片段和还在生长的虚构世界。</p>
+                <p>把计划读的书留在这里，把真正留下来的句子慢慢收成一本自己的阅读册。</p>
             </div>
 
-            <section class="category-board" id="fiction">
-                <div class="board-head">
+            <section class="library-section" id="weekly-reading">
+                <div class="section-header">
                     <div>
-                        <div class="eyebrow">小说</div>
-                        <h2>小说</h2>
+                        <div class="eyebrow">本周书单</div>
+                        <h2>本周书单</h2>
                     </div>
-                    <span class="board-count">0 篇</span>
+                    <span class="board-count">从后台随时更新</span>
                 </div>
-                <div class="empty-board">小说草稿暂时还没有挂出来</div>
+                <div id="weekly-book-list" class="weekly-book-list"></div>
+            </section>
+
+            <section class="library-section" id="book-reviews">
+                <div class="section-header">
+                    <div>
+                        <div class="eyebrow">书评</div>
+                        <h2>书评分区</h2>
+                    </div>
+                    <span class="board-count">每本书一个独立分区</span>
+                </div>
+                <div id="book-review-shelf" class="book-review-shelf"></div>
             </section>
 
             <footer class="site-footer">
-                <p>&copy; 2026 雾中书桌</p>
+                <p>&copy; 2026 <span data-site-title>雾中书桌</span></p>
             </footer>
         </main>
     </div>
+    <script src="library.js"></script>
     <script src="script.js"></script>
 </body>
 </html>

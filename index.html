@@ -24,30 +24,103 @@
                 <a href="fiction.html" class="nav-bubble">小说</a>
                 <a href="tech.html" class="nav-bubble">技术</a>
                 <a href="ai-art.html" class="nav-bubble">AI 绘图</a>
+                <a href="books.html" class="nav-bubble">读书</a>
                 <a href="about.html" class="nav-bubble">关于</a>
                 <a href="admin/index.html" class="nav-bubble">管理</a>
             </nav>
         </header>
-        <main class="glass-panel fade-in">
-            <div class="page-head">
-                <div>
-                    <div class="eyebrow">网络日志</div>
-                    <h1>雾中书桌</h1>
-                </div>
-                <p>把稍纵即逝的想法留在纸上，把可以继续生长的草稿留在身边。</p>
-            </div>
+        <main class="home-layout fade-in">
+            <section class="home-hero-layout" aria-label="个人资料与音乐">
+                <article class="home-feature home-profile-card">
+                    <div class="home-profile-intro">
+                        <div class="home-profile-avatar" data-profile-avatar>书</div>
+                        <div class="home-profile-identity">
+                            <div class="eyebrow">个人资料</div>
+                            <h1 data-profile-name>博主</h1>
+                            <p class="home-profile-signature" data-profile-signature>把想法留在纸上。</p>
+                        </div>
+                    </div>
+                    <p class="home-profile-bio" data-profile-bio>热爱技术和创作，用这个博客记录生活点滴、技术分享和未完的故事。</p>
+                </article>
 
-            <section class="hero-section">
-                <h2>欢迎来到我的网络日志</h2>
-                <p>技术、随笔、小说草稿和项目记录都收在这里。最近的内容会出现在文章区，之后也可以按标签分类浏览。</p>
-                <a href="essays.html" class="btn btn-primary">开始浏览</a>
+                <article class="home-feature home-music-card">
+                    <div class="home-music-head">
+                        <div>
+                            <div class="eyebrow">正在播放</div>
+                            <h2 data-music-title>未设置音乐</h2>
+                            <p data-music-artist>在管理后台添加音乐链接后可用</p>
+                        </div>
+                        <div class="home-music-disc" aria-hidden="true">
+                            <span></span>
+                        </div>
+                    </div>
+                    <audio id="home-audio-player" controls preload="metadata" aria-label="音乐播放器"></audio>
+                    <p class="home-music-hint" data-music-empty>也可以把喜欢的歌放在首页，作为每次点开博客时的小小背景。</p>
+                </article>
+            </section>
+
+            <section class="home-bubble-grid" aria-label="内容概览">
+                <article class="home-bubble">
+                    <div class="home-bubble-head">
+                        <span class="eyebrow">随笔</span>
+                        <h2>随笔与日常</h2>
+                    </div>
+                    <p>记录一些没有急着变成结论的想法，和生活里值得留下的碎片。</p>
+                    <a href="essays.html" class="bubble-link">进入随笔</a>
+                </article>
+
+                <article class="home-bubble">
+                    <div class="home-bubble-head">
+                        <span class="eyebrow">小说</span>
+                        <h2>小说草稿</h2>
+                    </div>
+                    <p>角色、场景和还在生长的故事片段，会按自己的节奏慢慢展开。</p>
+                    <a href="fiction.html" class="bubble-link">进入小说</a>
+                </article>
+
+                <article class="home-bubble">
+                    <div class="home-bubble-head">
+                        <span class="eyebrow">技术</span>
+                        <h2>技术笔记</h2>
+                    </div>
+                    <p>编程经验、工具使用，以及解决具体问题后留下的过程记录。</p>
+                    <a href="tech.html" class="bubble-link">进入技术</a>
+                </article>
+
+                <article class="home-bubble">
+                    <div class="home-bubble-head">
+                        <span class="eyebrow">AI 绘图</span>
+                        <h2>图像实验</h2>
+                    </div>
+                    <p>把生成图像的实验整理成小型画廊，也保留不同主题的视觉草稿。</p>
+                    <a href="ai-art.html" class="bubble-link">进入画廊</a>
+                </article>
+
+                <article class="home-bubble home-bubble-books">
+                    <div class="home-bubble-head">
+                        <span class="eyebrow">阅读</span>
+                        <h2>本周书单</h2>
+                    </div>
+                    <div id="home-weekly-books" class="mini-list"></div>
+                    <a href="books.html" class="bubble-link">查看读书区</a>
+                </article>
+
+                <article class="home-bubble home-bubble-reviews">
+                    <div class="home-bubble-head">
+                        <span class="eyebrow">书评</span>
+                        <h2>最近摘录</h2>
+                    </div>
+                    <div id="home-recent-review" class="mini-list"></div>
+                    <a href="books.html" class="bubble-link">查看全部书评</a>
+                </article>
             </section>
 
             <footer class="site-footer">
-                <p>&copy; 2026 雾中书桌 - 用写作记录生活</p>
+                <p>&copy; 2026 <span data-site-title>雾中书桌</span> - 用写作记录生活</p>
             </footer>
         </main>
     </div>
+    <script src="library.js"></script>
     <script src="script.js"></script>
 </body>
 </html>
