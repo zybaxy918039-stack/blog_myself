@@ -4,6 +4,11 @@
   --backdrop-opacity: 0.78;
   --backdrop-blur: 18px;
   --backdrop-surface: rgba(238, 247, 243, var(--backdrop-opacity));
+  --text-over-image: #242827;
+  --text-over-image-soft: #3d4543;
+  --text-over-image-muted: #606a67;
+  --text-shadow-over-image: 0 2px 8px rgba(16, 31, 29, 0.9), 0 0 24px rgba(16, 31, 29, 0.46);
+  --text-shadow-over-image-soft: 0 2px 7px rgba(16, 31, 29, 0.82), 0 0 18px rgba(16, 31, 29, 0.36);
   --panel-opacity: 0.82;
   --panel-blur: 12px;
   --panel-surface: rgba(238, 247, 243, var(--panel-opacity));
@@ -27,6 +32,103 @@
   --font-display: "LXGW WenKai", "Noto Serif SC", "Songti SC", "STSong", "Microsoft YaHei", serif;
   --font-body: "LXGW WenKai", "Noto Serif SC", "PingFang SC", "Microsoft YaHei", system-ui, sans-serif;
   --font-mono: "Cascadia Code", "Consolas", "SFMono-Regular", "Courier New", monospace;
+}
+
+/* Background-image text legibility */
+.site-header .brand-title {
+  color: var(--text-over-image);
+  font-weight: 800;
+  letter-spacing: 0.025em;
+  text-shadow: var(--text-shadow-over-image);
+}
+
+.site-header .brand-sub {
+  color: var(--text-over-image-muted);
+  font-weight: 700;
+  letter-spacing: 0.04em;
+  text-shadow: var(--text-shadow-over-image-soft);
+}
+
+.site-nav .nav-bubble {
+  color: var(--text-over-image);
+  font-weight: 700;
+  letter-spacing: 0.03em;
+  text-shadow: var(--text-shadow-over-image);
+}
+
+.site-nav .nav-bubble:hover,
+.site-nav .nav-bubble:focus-visible,
+.site-nav .nav-bubble.active {
+  color: #111716;
+}
+
+.page-shell > main:not(.admin-main) > .page-head h1,
+.page-shell > main:not(.admin-main) > .page-head p,
+.page-shell > main:not(.admin-main) > .page-head .eyebrow,
+.page-shell > main:not(.admin-main) .section-header h2,
+.page-shell > main:not(.admin-main) .section-header .eyebrow,
+.page-shell > main:not(.admin-main) .board-head h2,
+.page-shell > main:not(.admin-main) .board-head .eyebrow,
+.page-shell > main:not(.admin-main) .board-count,
+.page-shell > main:not(.admin-main) .gallery-title,
+.page-shell > main:not(.admin-main) .gallery-title span,
+.page-shell > main:not(.admin-main) .gallery-board-head h2,
+.page-shell > main:not(.admin-main) .gallery-board-head span,
+.page-shell > main:not(.admin-main) .post-header .post-title,
+.page-shell > main:not(.admin-main) .profile-section h2,
+.page-shell > main:not(.admin-main) .content-section h3,
+.page-shell > main:not(.admin-main) .contact-section h3 {
+  color: var(--text-over-image);
+  font-weight: 800;
+  letter-spacing: 0.025em;
+  text-shadow: var(--text-shadow-over-image);
+}
+
+.page-shell > main:not(.admin-main) > .page-head p,
+.page-shell > main:not(.admin-main) .board-count,
+.page-shell > main:not(.admin-main) .gallery-title,
+.page-shell > main:not(.admin-main) .gallery-board-head span,
+.page-shell > main:not(.admin-main) .bio,
+.page-shell > main:not(.admin-main) .content-section p,
+.page-shell > main:not(.admin-main) .contact-section p {
+  color: var(--text-over-image-soft);
+  font-weight: 600;
+  letter-spacing: 0.018em;
+  text-shadow: var(--text-shadow-over-image-soft);
+}
+
+.page-shell > main:not(.admin-main) .markdown-content,
+.page-shell > main:not(.admin-main) .post-content article {
+  color: var(--text-over-image-soft);
+  font-weight: 600;
+  letter-spacing: 0.018em;
+  text-shadow: var(--text-shadow-over-image-soft);
+}
+
+.page-shell > main:not(.admin-main) .markdown-content h2,
+.page-shell > main:not(.admin-main) .post-content article h2,
+.page-shell > main:not(.admin-main) .markdown-content h3,
+.page-shell > main:not(.admin-main) .post-content article h3 {
+  color: var(--text-over-image);
+  font-weight: 800;
+  letter-spacing: 0.025em;
+  text-shadow: var(--text-shadow-over-image);
+}
+
+.page-shell > main:not(.admin-main) .post-header .post-meta,
+.page-shell > main:not(.admin-main) .post-header .post-tags,
+.page-shell > main:not(.admin-main) .post-header .tag {
+  color: var(--text-over-image-muted);
+  font-weight: 600;
+  letter-spacing: 0.04em;
+  text-shadow: var(--text-shadow-over-image-soft);
+}
+
+.site-footer,
+.site-footer p {
+  color: var(--text-over-image-muted);
+  font-weight: 600;
+  text-shadow: var(--text-shadow-over-image-soft);
 }
 
 * {
