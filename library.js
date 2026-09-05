@@ -168,11 +168,6 @@
       getWeeklyBooks(),
       3
     );
-    renderBookReviews(
-      document.getElementById("home-recent-review"),
-      getBookReviews(),
-      1
-    );
   }
 
   function renderBooksPage() {
