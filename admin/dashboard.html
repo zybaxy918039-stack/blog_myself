@@ -486,9 +486,21 @@
 
             <section id="deploy" class="admin-section">
                 <h2>部署设置</h2>
-                <p>后续将在这里展示 Cloudflare Pages、GitHub Actions、D1 与 R2 的连接状态。</p>
+                <p>推送会自动完成构建与上线：文章放进 <code>content/posts/</code>，图片放进 <code>content/uploads/</code>，代码改动直接推到 <code>main</code> 分支即可。</p>
+
+                <div class="setting-block">
+                    <h3>首次部署前需要配置一次</h3>
+                    <ol class="guide-steps">
+                        <li>在 Cloudflare 创建 API Token：Account 下 D1、R2、Workers Scripts、Pages 的编辑权限。</li>
+                        <li>在 GitHub 仓库的 Secrets and variables &gt; Actions 中添加 <code>CLOUDFLARE_API_TOKEN</code>。</li>
+                        <li>再添加 <code>CLOUDFLARE_ACCOUNT_ID</code>。</li>
+                        <li>推送到 main 触发 Actions：自动创建 D1（默认 <code>blog-comments-db</code>）与 R2（默认 <code>blog-attachments</code>），执行初始表结构，再部署 Pages。</li>
+                        <li>部署成功后，在 Cloudflare Pages 项目设置里绑定你的自定义域名，之后所有更新都由每次推送自动完成。</li>
+                    </ol>
+                </div>
+
                 <div class="admin-placeholder">
-                    部署功能尚未接入。计划：文章推送到 GitHub 后由 Actions 构建，再部署到 Cloudflare Pages；评论与附件后续接入 D1 / R2。
+                    详细步骤与本地手动部署命令见部署辅助页：<a href="../deploy.html" target="_blank" rel="noreferrer">deploy.html</a>
                 </div>
             </section>
 

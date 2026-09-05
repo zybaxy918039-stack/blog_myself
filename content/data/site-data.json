@@ -1,0 +1,105 @@
+{
+  "appearance": {
+    "siteTitle": "雾中书桌",
+    "siteSubtitle": "个人网络日志",
+    "image": "url(\"assets/bg-mist-morning.jpg\")",
+    "backdropOpacity": 0.78,
+    "backdropBlur": 18,
+    "panelOpacity": 0.82,
+    "panelBlur": 12,
+    "contentWidth": 1100
+  },
+  "homeProfile": {
+    "avatar": "书",
+    "name": "博主",
+    "bio": "热爱技术和创作，用这个博客记录生活点滴、技术分享和未完的故事。",
+    "signature": "把想法留在纸上。"
+  },
+  "music": {
+    "title": "未设置音乐",
+    "artist": "",
+    "url": ""
+  },
+  "homeBubbleBackgrounds": {
+    "essays": "",
+    "tech": "",
+    "books": ""
+  },
+  "homeBubbles": {
+    "essays": {
+      "eyebrow": "随笔",
+      "title": "随笔与日常",
+      "description": "记录一些没有急着变成结论的想法，和生活里值得留下的碎片。",
+      "background": "",
+      "titleColor": "#17201f",
+      "textColor": "#35413f",
+      "titleSize": 24,
+      "textSize": 16,
+      "fontWeight": 700
+    },
+    "tech": {
+      "eyebrow": "技术",
+      "title": "技术笔记",
+      "description": "编程经验、工具使用，以及解决具体问题后留下的过程记录。",
+      "background": "",
+      "titleColor": "#17201f",
+      "textColor": "#35413f",
+      "titleSize": 24,
+      "textSize": 16,
+      "fontWeight": 700
+    },
+    "books": {
+      "eyebrow": "阅读",
+      "title": "本周书单",
+      "subtitle": "在读书与摘录之间，留下一小块慢下来的地方。",
+      "coverImage": "",
+      "background": "",
+      "titleColor": "#17201f",
+      "textColor": "#35413f",
+      "titleSize": 22,
+      "textSize": 15,
+      "fontWeight": 700
+    }
+  },
+  "weeklyCover": {
+    "image": "",
+    "title": "本周书单",
+    "subtitle": "在读书与摘录之间，留下一小块慢下来的地方。"
+  },
+  "weeklyBooks": [
+    {
+      "id": "weekly-default-1",
+      "title": "置身事内",
+      "author": "兰小欢",
+      "reason": "补一补中国经济运行与制度脉络",
+      "progress": "进行中"
+    },
+    {
+      "id": "weekly-default-2",
+      "title": "写作这回事",
+      "author": "斯蒂芬·金",
+      "reason": "从作者的写作经验里重新理解表达",
+      "progress": "未开始"
+    }
+  ],
+  "bookReviews": [
+    {
+      "id": "book-default-1",
+      "title": "百年孤独",
+      "author": "加西亚·马尔克斯",
+      "cover": "",
+      "quotes": [
+        {
+          "id": "quote-default-1",
+          "text": "过去都是假的，回忆没有归路，春天总是一去不返。",
+          "note": "第一次读到这里时，感到时间被折叠成了一张薄纸。"
+        },
+        {
+          "id": "quote-default-2",
+          "text": "世界新生伊始，许多事物还没有名字，提到的时候尚需用手指指点点。",
+          "note": "像重新学习语言，也像重新命名自己的经验。"
+        }
+      ]
+    }
+  ]
+}

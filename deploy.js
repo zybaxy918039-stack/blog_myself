@@ -1,162 +1,147 @@
-// 部署脚本
-document.addEventListener('DOMContentLoaded', function() {
-    const deployBtn = document.getElementById('deploy-btn');
-    const statusSection = document.getElementById('status');
-    const progress = document.getElementById('progress');
-    const statusText = document.getElementById('status-text');
-    const btnText = deployBtn.querySelector('.btn-text');
-    const btnLoading = deployBtn.querySelector('.btn-loading');
-    
-    deployBtn.addEventListener('click', function() {
-        const repo = document.getElementById('github-repo').value;
-        const branch = document.getElementById('branch-name').value;
-        const autoDeploy = document.getElementById('auto-deploy').checked;
-        
-        // 表单验证
-        if (!repo) {
-            alert('请填写 GitHub 仓库地址');
-            return;
-        }
-        
-        // 显示部署状态
-        deployBtn.disabled = true;
-        statusSection.classList.remove('hidden');
-        btnText.classList.add('hidden');
-        btnLoading.classList.remove('hidden');
-        
-        // 模拟部署进度
-        let progressValue = 0;
-        const interval = setInterval(() => {
-            progressValue += 10;
-            progress.style.width = progressValue + '%';
-            
-            if (progressValue === 20) {
-                statusText.textContent = '正在连接 GitHub 仓库...';
-            } else if (progressValue === 50) {
-                statusText.textContent = '正在配置 Cloudflare Pages...';
-            } else if (progressValue === 80) {
-                statusText.textContent = '正在初始化部署环境...';
-            } else if (progressValue >= 100) {
-                clearInterval(interval);
-                statusText.textContent = '部署完成！';
-                
-                setTimeout(() => {
-                    deployBtn.disabled = false;
-                    btnText.classList.remove('hidden');
-                    btnLoading.classList.add('hidden');
-                    progress.style.width = '0%';
-                    
-                    // 显示成功消息
-                    alert('部署成功！\n\n你的博客将很快部署到 Cloudflare Pages。\n访问您的站点: https://your-blog.pages.dev');
-                }, 800);
-            }
-        }, 300);
-    });
-    
-    // GitHub 仓库输入验证
-    document.getElementById('github-repo').addEventListener('input', function(e) {
-        const value = e.target.value.trim();
-        if (value && !value.includes('github.com')) {
-            e.target.style.borderColor = '#e94560';
-        } else {
-            e.target.style.borderColor = '#4a5568';
-        }
-    });
-});
-// 部署脚本
-document.addEventListener('DOMContentLoaded', function() {
-    const deployBtn = document.getElementById('deploy-btn');
-    const statusSection = document.getElementById('status');
-    const statusDetails = document.getElementById('status-details');
-    const progress = document.getElementById('progress');
-    const statusText = document.getElementById('status-text');
-    const btnText = deployBtn.querySelector('.btn-text');
-    const btnLoading = deployBtn.querySelector('.btn-loading');
-    const btnIcon = deployBtn.querySelector('.btn-icon');
-    
-    deployBtn.addEventListener('click', function() {
-        const repo = document.getElementById('github-repo').value;
-        const branch = document.getElementById('branch-name').value;
-        const autoDeploy = document.getElementById('auto-deploy').checked;
-        const httpsOnly = document.getElementById('https-only').checked;
-        
-        // 表单验证
-        if (!repo) {
-            alert('请填写 GitHub 仓库地址');
-            return;
-        }
-        
-        if (!repo.includes('github.com')) {
-            alert('请输入有效的 GitHub 仓库地址');
-            return;
-        }
-        
-        // 显示部署状态
-        deployBtn.disabled = true;
-        statusSection.classList.remove('hidden');
-        statusDetails.classList.remove('hidden');
-        btnText.classList.add('hidden');
-        btnLoading.classList.remove('hidden');
-        btnIcon.classList.add('hidden');
-        
-        // 模拟部署进度
-        let progressValue = 0;
-        const interval = setInterval(() => {
-            progressValue += Math.random() * 15;
-            if (progressValue > 100) progressValue = 100;
-            progress.style.width = progressValue + '%';
-            
-            if (progressValue < 30) {
-                statusText.textContent = '正在连接 GitHub 仓库...';
-            } else if (progressValue < 60) {
-                statusText.textContent = '正在配置 Cloudflare Pages 项目...';
-            } else if (progressValue < 85) {
-                statusText.textContent = '正在初始化部署环境...';
-            } else if (progressValue < 95) {
-                statusText.textContent = '正在上传项目文件...';
-            } else if (progressValue >= 100) {
-                clearInterval(interval);
-                statusText.textContent = '部署完成！';
-                statusDetails.style.opacity = '1';
-+                 
-                setTimeout(() => {
-                    deployBtn.disabled = false;
-                    btnText.classList.remove('hidden');
-                    btnLoading.classList.add('hidden');
-                    btnIcon.classList.remove('hidden');
-                    progress.style.width = '0%';
-                    
-                    // 显示成功消息
-                    const deployUrl = repo.replace('https://github.com/', 'https://').replace('/blob/main', '');
-                    const alertMessage = `🎉 部署成功！
+// 部署辅助脚本：生成首次部署清单，并提供可复制的本地部署命令。
+// 真正的部署由 GitHub Actions 完成，浏览器不接触 Cloudflare 令牌。
+document.addEventListener("DOMContentLoaded", function () {
+  const repoInput = document.getElementById("github-repo");
+  const branchInput = document.getElementById("branch-name");
+  const accountInput = document.getElementById("cloudflare-account");
+  const checklistBtn = document.getElementById("checklist-btn");
+  const copyCommandBtn = document.getElementById("copy-command-btn");
+  const statusSection = document.getElementById("status");
+  const progress = document.getElementById("progress");
+  const statusText = document.getElementById("status-text");
+  const checklist = document.getElementById("checklist");
 
-✅ GitHub 仓库: ${repo}
-📁 部署分支: ${branch}
-🔒 HTTPS 强制: ${httpsOnly ? '是' : '否'}
+  function parseRepo(value) {
+    const text = String(value || "").trim().replace(/^https?:\/\//, "").replace(/^www\./, "");
+    const match = text.match(/^github\.com\/([^/#?]+)\/([^/#?]+)/i);
+    if (!match) return null;
+    return {
+      owner: match[1],
+      repo: match[2],
+      full: `${match[1]}/${match[2]}`
+    };
+  }
 
-🌐 你的站点将在几分钟后上线
-访问地址: ${deployUrl}
+  function setProgress(value) {
+    progress.style.width = value + "%";
+  }
 
-💡 提示: 你可以在 Cloudflare Dashboard 中管理部署和绑定自定义域名`;
-                    
-                    alert(alertMessage);
-                }, 800);
-            }
-        }, 400);
+  function buildChecklist() {
+    const repo = parseRepo(repoInput.value);
+    const branch = String(branchInput.value || "main").trim();
+    const account = String(accountInput.value || "").trim();
+    const items = [];
+
+    items.push({
+      label: "在 Cloudflare 创建 API Token",
+      detail: "权限：Account 下 D1、R2、Workers Scripts、Pages 的编辑权限。",
+      ok: true
     });
-    
-    // GitHub 仓库输入验证
-    document.getElementById('github-repo').addEventListener('input', function(e) {
-        const value = e.target.value.trim();
-        if (value && !value.includes('github.com')) {
-            e.target.style.borderColor = '#e94560';
-        } else {
-            e.target.style.borderColor = '#4a5568';
-        }
+    items.push({
+      label: "添加 GitHub Secrets",
+      detail: "仓库 Settings > Secrets and variables > Actions，添加 CLOUDFLARE_API_TOKEN 和 CLOUDFLARE_ACCOUNT_ID。",
+      ok: true
     });
-    
-    // 表单提交处理
-    deployBtn.addEventListener('click', function(e) {
-        e.preventDefault();
+    items.push({
+      label: "填写仓库地址",
+      detail: repo ? `将推送 ${repo.full} 的 ${branch} 分支。` : "需要先填写 GitHub 仓库地址。",
+      ok: Boolean(repo)
     });
+    items.push({
+      label: "推送触发自动部署",
+      detail: "推送后到 GitHub Actions 查看 Deploy Blog to Cloudflare Pages 运行状态。",
+      ok: Boolean(repo)
+    });
+    items.push({
+      label: "绑定自定义域名（仅首次）",
+      detail: account ? `Cloudflare 账户 ID：${account}` : "在 Actions 部署成功后，到 Pages 项目设置绑定你的 Cloudflare 域名。",
+      ok: true
+    });
+
+    return items;
+  }
+
+  checklistBtn.addEventListener("click", function () {
+    const repo = parseRepo(repoInput.value);
+    const account = String(accountInput.value || "").trim();
+    if (account) {
+      try {
+        localStorage.setItem("blogDeployAccountId", account);
+      } catch (error) {
+        // 忽略存储失败。
+      }
+    }
+
+    const items = buildChecklist();
+    const completed = items.filter((item) => item.ok).length;
+    statusSection.classList.remove("hidden");
+    setProgress(Math.round((completed / items.length) * 100));
+    statusText.textContent = repo
+      ? `清单已生成：${completed} / ${items.length} 项已确认，其余步骤见下方。`
+      : "请先填写 GitHub 仓库地址，其余步骤仍会展示。";
+    checklist.innerHTML = items
+      .map((item) => {
+        const mark = item.ok ? "&#10003;" : "&#9888;";
+        const cls = item.ok ? "status-item" : "status-item status-warn";
+        return `<div class="${cls}"><span class="status-label">${mark} ${item.label}</span><span class="status-value">${item.detail}</span></div>`;
+      })
+      .join("");
+  });
+
+  copyCommandBtn.addEventListener("click", function () {
+    const account = String(accountInput.value || "").trim();
+    const repo = parseRepo(repoInput.value);
+    const accountLine = account || "<你的 Cloudflare Account ID>";
+    const bash = `export CLOUDFLARE_API_TOKEN="<你的 API Token>"
+export CLOUDFLARE_ACCOUNT_ID="${accountLine}"
+export CLOUDFLARE_PAGES_PROJECT="${repo ? repo.repo : "blog"}"
+npm run deploy`;
+    const powershell = `$env:CLOUDFLARE_API_TOKEN = "<你的 API Token>"
+$env:CLOUDFLARE_ACCOUNT_ID = "${accountLine}"
+$env:CLOUDFLARE_PAGES_PROJECT = "${repo ? repo.repo : "blog"}"
+npm run deploy`;
+    const text = `Bash:\n${bash}\n\nPowerShell:\n${powershell}`;
+
+    function fallbackCopy() {
+      const hidden = document.createElement("textarea");
+      hidden.value = text;
+      hidden.style.position = "fixed";
+      hidden.style.opacity = "0";
+      document.body.appendChild(hidden);
+      hidden.select();
+      try {
+        document.execCommand("copy");
+      } catch (error) {
+        window.prompt("请手动复制以下命令：", text);
+      }
+      document.body.removeChild(hidden);
+    }
+
+    if (navigator.clipboard && navigator.clipboard.writeText) {
+      navigator.clipboard.writeText(text).then(
+        function () {
+          statusSection.classList.remove("hidden");
+          setProgress(100);
+          statusText.textContent = "本地部署命令已复制到剪贴板。";
+        },
+        fallbackCopy
+      );
+    } else {
+      fallbackCopy();
+    }
+  });
+
+  repoInput.addEventListener("input", function () {
+    const valid = parseRepo(repoInput.value);
+    repoInput.style.borderColor = repoInput.value.trim() && !valid ? "#e94560" : "#4a5568";
+  });
+
+  try {
+    const savedAccount = localStorage.getItem("blogDeployAccountId");
+    if (savedAccount && !accountInput.value) {
+      accountInput.value = savedAccount;
+    }
+  } catch (error) {
+    // 忽略存储失败。
+  }
 });

@@ -1,0 +1,8 @@
+name = "blog"
+pages_build_output_dir = "./dist"
+compatibility_date = "2026-09-05"
+compatibility_flags = ["nodejs_compat"]
+
+# D1 与 R2 的绑定由 .github/workflows/deploy.yml 自动创建并注入，
+# 账号 ID 与 API Token 保存在 GitHub Secrets 中，不进仓库。
+# 本地预览：npx wrangler pages dev

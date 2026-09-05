@@ -1,2 +1,7 @@
 .agents/
 skills-lock.json
+node_modules/
+dist/
+.wrangler/
+wrangler.ci.toml
+.DS_Store
