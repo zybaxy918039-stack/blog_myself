@@ -283,9 +283,60 @@
   margin-bottom: 18px;
 }
 
+.home-bubble-settings-form {
+  display: flex;
+  flex-direction: column;
+  gap: 18px;
+}
+
+.home-bubble-settings-layout {
+  display: grid;
+  gap: 18px;
+}
+
+.home-bubble-control-grid {
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+}
+
+.home-bubble-control-grid .control-group-wide {
+  grid-column: 1 / -1;
+}
+
+.home-bubble-control-grid input[type="color"] {
+  width: 72px;
+  height: 42px;
+  padding: 4px;
+  border: 1px solid var(--line);
+  border-radius: 10px;
+  background: var(--surface-mist-strong);
+  cursor: pointer;
+}
+
+.home-bubble-control-grid input[type="range"] {
+  width: 100%;
+  accent-color: var(--accent);
+}
+
+.home-bubble-control-grid output {
+  margin-left: 6px;
+  color: var(--accent-deep);
+  font-size: 0.88rem;
+  font-weight: 800;
+}
+
 .home-profile-controls .control-group-wide,
 .home-music-controls .control-group-wide {
   grid-column: 1 / -1;
+}
+
+@media (max-width: 700px) {
+  .home-bubble-control-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .home-bubble-control-grid .control-group-wide {
+    grid-column: auto;
+  }
 }
 
 @media (max-width: 700px) {

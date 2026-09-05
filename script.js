@@ -2,6 +2,7 @@ const APPEARANCE_KEY = "blogAppearance";
 const HOME_PROFILE_KEY = "blogHomeProfile";
 const MUSIC_KEY = "blogMusic";
 const HOME_BUBBLE_BACKGROUNDS_KEY = "blogHomeBubbleBackgrounds";
+const HOME_BUBBLE_SETTINGS_KEY = "blogHomeBubbleSettings";
 
 const DEFAULT_APPEARANCE = {
   siteTitle: "雾中书桌",
@@ -31,6 +32,43 @@ const DEFAULT_HOME_BUBBLE_BACKGROUNDS = {
   essays: "",
   tech: "",
   books: ""
+};
+
+const DEFAULT_HOME_BUBBLE_SETTINGS = {
+  essays: {
+    eyebrow: "随笔",
+    title: "随笔与日常",
+    description: "记录一些没有急着变成结论的想法，和生活里值得留下的碎片。",
+    background: "",
+    titleColor: "#17201f",
+    textColor: "#35413f",
+    titleSize: 24,
+    textSize: 16,
+    fontWeight: 700
+  },
+  tech: {
+    eyebrow: "技术",
+    title: "技术笔记",
+    description: "编程经验、工具使用，以及解决具体问题后留下的过程记录。",
+    background: "",
+    titleColor: "#17201f",
+    textColor: "#35413f",
+    titleSize: 24,
+    textSize: 16,
+    fontWeight: 700
+  },
+  books: {
+    eyebrow: "阅读",
+    title: "本周书单",
+    subtitle: "在读书与摘录之间，留下一小块慢下来的地方。",
+    coverImage: "",
+    background: "",
+    titleColor: "#17201f",
+    textColor: "#35413f",
+    titleSize: 22,
+    textSize: 15,
+    fontWeight: 700
+  }
 };
 
 function applySiteIdentity(title, subtitle) {
@@ -75,6 +113,51 @@ function getSavedHomeBubbleBackgrounds() {
   }
 }
 
+function readLegacyWeeklyCover() {
+  try {
+    const raw = localStorage.getItem("blogWeeklyCover");
+    return raw ? JSON.parse(raw) || {} : {};
+  } catch (error) {
+    return {};
+  }
+}
+
+function getSavedHomeBubbleSettings() {
+  let saved = {};
+  let hasSavedSettings = false;
+
+  try {
+    const raw = localStorage.getItem(HOME_BUBBLE_SETTINGS_KEY);
+    if (raw) {
+      hasSavedSettings = true;
+      saved = JSON.parse(raw) || {};
+    }
+  } catch (error) {
+    saved = {};
+  }
+
+  const legacyBackgrounds = getSavedHomeBubbleBackgrounds();
+  const settings = ["essays", "tech", "books"].reduce((result, key) => {
+    result[key] = {
+      ...DEFAULT_HOME_BUBBLE_SETTINGS[key],
+      ...(saved[key] || {})
+    };
+    if (!hasSavedSettings && legacyBackgrounds[key]) {
+      result[key].background = legacyBackgrounds[key];
+    }
+    return result;
+  }, {});
+
+  if (!hasSavedSettings) {
+    const legacyCover = readLegacyWeeklyCover();
+    if (legacyCover.image) settings.books.coverImage = legacyCover.image;
+    if (legacyCover.title) settings.books.title = legacyCover.title;
+    if (legacyCover.subtitle) settings.books.subtitle = legacyCover.subtitle;
+  }
+
+  return settings;
+}
+
 function applyHomeBubbleBackgrounds() {
   const saved = getSavedHomeBubbleBackgrounds();
   const backgrounds = {
@@ -99,6 +182,129 @@ function applyHomeBubbleBackgrounds() {
       bubble.classList.remove("has-custom-background");
     }
   });
+}
+
+function setBubbleBackground(bubble, image) {
+  const url = String(image || "").trim();
+  if (url) {
+    bubble.style.backgroundImage = `url("${url}")`;
+    bubble.classList.add("has-custom-background");
+  } else {
+    bubble.style.backgroundImage = "";
+    bubble.classList.remove("has-custom-background");
+  }
+}
+
+function styleBubbleText(element, color, size, weight) {
+  if (!element) return;
+  if (color) {
+    element.style.color = color;
+  } else {
+    element.style.color = "";
+  }
+  element.style.fontSize = size ? `${size}px` : "";
+  element.style.fontWeight = weight ? String(weight) : "";
+}
+
+function applyTextBubble(bubble, settings) {
+  if (!bubble) return;
+
+  const eyebrow = bubble.querySelector(".eyebrow");
+  const heading = bubble.querySelector(".home-bubble-head h2");
+  const paragraph = bubble.querySelector(".home-bubble-head + p");
+
+  if (eyebrow) {
+    eyebrow.textContent = settings.eyebrow || "";
+    styleBubbleText(
+      eyebrow,
+      settings.textColor,
+      Math.max(11, Math.round(settings.textSize * 0.78)),
+      settings.fontWeight
+    );
+  }
+
+  if (heading) {
+    heading.textContent = settings.title || "";
+    styleBubbleText(
+      heading,
+      settings.titleColor,
+      settings.titleSize,
+      settings.fontWeight
+    );
+  }
+
+  if (paragraph) {
+    paragraph.textContent = settings.description || "";
+    styleBubbleText(
+      paragraph,
+      settings.textColor,
+      settings.textSize,
+      settings.fontWeight
+    );
+  }
+}
+
+function applyWeeklyCoverStyles(settings) {
+  const title = document.querySelector(".home-weekly-cover-title");
+  const copy = document.querySelector(".home-weekly-cover-copy p");
+  const placeholder = document.querySelector(".home-weekly-cover-placeholder");
+
+  styleBubbleText(title, settings.titleColor, settings.titleSize, settings.fontWeight);
+  styleBubbleText(copy, settings.textColor, settings.textSize, settings.fontWeight);
+  styleBubbleText(placeholder, settings.titleColor, settings.titleSize, settings.fontWeight);
+}
+
+function applyHomeBubbleSettings(savedSettings) {
+  const settings = savedSettings || getSavedHomeBubbleSettings();
+  const bubbles = [
+    { key: "essays", selector: ".home-bubble-essays" },
+    { key: "tech", selector: ".home-bubble-tech" },
+    { key: "books", selector: ".home-bubble-books" }
+  ];
+
+  bubbles.forEach(({ key, selector }) => {
+    const bubble = document.querySelector(selector);
+    if (!bubble) return;
+    setBubbleBackground(bubble, settings[key].background);
+  });
+
+  applyTextBubble(document.querySelector(".home-bubble-essays"), settings.essays);
+  applyTextBubble(document.querySelector(".home-bubble-tech"), settings.tech);
+
+  const booksBubble = document.querySelector(".home-bubble-books");
+  if (booksBubble) {
+    const heading = booksBubble.querySelector(".home-bubble-head h2");
+    const eyebrow = booksBubble.querySelector(".eyebrow");
+    if (heading) {
+      heading.textContent = settings.books.title || "";
+      styleBubbleText(
+        heading,
+        settings.books.titleColor,
+        settings.books.titleSize,
+        settings.books.fontWeight
+      );
+    }
+    if (eyebrow) {
+      eyebrow.textContent = settings.books.eyebrow || "";
+      styleBubbleText(
+        eyebrow,
+        settings.books.textColor,
+        Math.max(11, Math.round(settings.books.textSize * 0.78)),
+        settings.books.fontWeight
+      );
+    }
+  }
+
+  if (window.BlogLibrary) {
+    window.BlogLibrary.saveWeeklyCover({
+      image: settings.books.coverImage,
+      title: settings.books.title,
+      subtitle: settings.books.subtitle
+    });
+    window.BlogLibrary.renderHome();
+  }
+
+  applyWeeklyCoverStyles(settings.books);
 }
 
 function applyHomeContent() {
@@ -488,15 +694,174 @@ function initHomeBubbleBackgroundControls() {
   }
 }
 
+function initHomeBubbleSettingsControls() {
+  const form = document.getElementById("home-bubble-settings-form");
+  const statusLine = document.getElementById("home-bubble-settings-status");
+  if (!form) return;
+
+  const settings = getSavedHomeBubbleSettings();
+  const keys = [
+    { key: "essays", coverMode: false },
+    { key: "tech", coverMode: false },
+    { key: "books", coverMode: true }
+  ];
+
+  function getField(prefix, name) {
+    return document.getElementById(`bubble-${prefix}-${name}`);
+  }
+
+  function setOutput(prefix, name, value) {
+    const output = document.getElementById(`bubble-${prefix}-${name}-value`);
+    if (output) output.textContent = `${value}px`;
+  }
+
+  keys.forEach(({ key, coverMode }) => {
+    const values = settings[key];
+    const eyebrow = getField(key, "eyebrow");
+    const title = getField(key, "title");
+    const description = getField(key, coverMode ? "subtitle" : "description");
+    const coverImage = getField(key, "cover-image");
+    const background = getField(key, "bg");
+    const titleColor = getField(key, "title-color");
+    const textColor = getField(key, "text-color");
+    const titleSize = getField(key, "title-size");
+    const textSize = getField(key, "text-size");
+    const weight = getField(key, "weight");
+
+    if (eyebrow) eyebrow.value = values.eyebrow;
+    if (title) title.value = values.title;
+    if (description) description.value = coverMode ? values.subtitle : values.description;
+    if (coverImage) coverImage.value = values.coverImage || "";
+    if (background) background.value = values.background || "";
+    if (titleColor) titleColor.value = values.titleColor;
+    if (textColor) textColor.value = values.textColor;
+    if (titleSize) {
+      titleSize.value = values.titleSize;
+      setOutput(key, "title-size", values.titleSize);
+    }
+    if (textSize) {
+      textSize.value = values.textSize;
+      setOutput(key, "text-size", values.textSize);
+    }
+    if (weight) weight.value = String(values.fontWeight);
+
+    if (titleSize) {
+      titleSize.addEventListener("input", () => {
+        setOutput(key, "title-size", titleSize.value);
+      });
+    }
+    if (textSize) {
+      textSize.addEventListener("input", () => {
+        setOutput(key, "text-size", textSize.value);
+      });
+    }
+  });
+
+  function readBubble(key, coverMode) {
+    const get = (name, fallback) => {
+      const element = getField(key, name);
+      return element ? element.value.trim() : fallback;
+    };
+    const getNumber = (name, fallback) => {
+      const value = Number(get(name, fallback));
+      return Number.isFinite(value) ? value : fallback;
+    };
+
+    return {
+      eyebrow: get("eyebrow", DEFAULT_HOME_BUBBLE_SETTINGS[key].eyebrow),
+      title: get("title", DEFAULT_HOME_BUBBLE_SETTINGS[key].title),
+      description: coverMode
+        ? undefined
+        : get("description", DEFAULT_HOME_BUBBLE_SETTINGS[key].description),
+      subtitle: coverMode
+        ? get("subtitle", DEFAULT_HOME_BUBBLE_SETTINGS[key].subtitle)
+        : undefined,
+      coverImage: coverMode ? get("cover-image", "") : undefined,
+      background: get("bg", ""),
+      titleColor: get("title-color", DEFAULT_HOME_BUBBLE_SETTINGS[key].titleColor),
+      textColor: get("text-color", DEFAULT_HOME_BUBBLE_SETTINGS[key].textColor),
+      titleSize: getNumber("title-size", DEFAULT_HOME_BUBBLE_SETTINGS[key].titleSize),
+      textSize: getNumber("text-size", DEFAULT_HOME_BUBBLE_SETTINGS[key].textSize),
+      fontWeight: getNumber("weight", DEFAULT_HOME_BUBBLE_SETTINGS[key].fontWeight)
+    };
+  }
+
+  function refreshBooks() {
+    const books = getSavedHomeBubbleSettings().books;
+    const title = getField("books", "title");
+    const subtitle = getField("books", "subtitle");
+    const image = getField("books", "cover-image");
+    if (title) title.value = books.title;
+    if (subtitle) subtitle.value = books.subtitle;
+    if (image) image.value = books.coverImage || "";
+  }
+
+  form.addEventListener("submit", (event) => {
+    event.preventDefault();
+    const next = {
+      essays: readBubble("essays", false),
+      tech: readBubble("tech", false),
+      books: readBubble("books", true)
+    };
+
+    try {
+      localStorage.setItem(HOME_BUBBLE_SETTINGS_KEY, JSON.stringify(next));
+      localStorage.setItem(
+        HOME_BUBBLE_BACKGROUNDS_KEY,
+        JSON.stringify({
+          essays: next.essays.background,
+          tech: next.tech.background,
+          books: next.books.background
+        })
+      );
+      if (window.BlogLibrary) {
+        window.BlogLibrary.saveWeeklyCover({
+          image: next.books.coverImage,
+          title: next.books.title,
+          subtitle: next.books.subtitle
+        });
+      }
+      applyHomeBubbleSettings(next);
+      if (statusLine) statusLine.textContent = "首页气泡设置已保存";
+    } catch (error) {
+      if (statusLine) statusLine.textContent = "浏览器未允许保存";
+    }
+  });
+
+  const resetButton = document.getElementById("reset-home-bubble-settings");
+  if (resetButton) {
+    resetButton.addEventListener("click", () => {
+      try {
+        localStorage.removeItem(HOME_BUBBLE_SETTINGS_KEY);
+        localStorage.removeItem(HOME_BUBBLE_BACKGROUNDS_KEY);
+      } catch (error) {
+        // Ignore unavailable storage.
+      }
+      if (window.BlogLibrary) {
+        window.BlogLibrary.saveWeeklyCover({
+          image: DEFAULT_HOME_BUBBLE_SETTINGS.books.coverImage,
+          title: DEFAULT_HOME_BUBBLE_SETTINGS.books.title,
+          subtitle: DEFAULT_HOME_BUBBLE_SETTINGS.books.subtitle
+        });
+      }
+      refreshBooks();
+      applyHomeBubbleSettings(DEFAULT_HOME_BUBBLE_SETTINGS);
+      if (statusLine) statusLine.textContent = "首页气泡设置已恢复默认";
+    });
+  }
+}
+
 document.addEventListener("DOMContentLoaded", function () {
   applyAppearance();
   applyHomeContent();
   applyHomeBubbleBackgrounds();
+  applyHomeBubbleSettings();
   initRipple();
   initFilters();
   initAppearanceControls();
   initHomeContentControls();
   initHomeBubbleBackgroundControls();
+  initHomeBubbleSettingsControls();
 
   document.querySelectorAll('a[href^="#"]').forEach((anchor) => {
     anchor.addEventListener("click", (event) => {

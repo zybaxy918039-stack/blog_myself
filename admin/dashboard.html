@@ -18,6 +18,7 @@
             </a>
             <nav class="admin-nav" aria-label="后台导航">
                 <a class="admin-nav-item active" href="#appearance">外观设置</a>
+                <a class="admin-nav-item" href="#home-bubbles">首页气泡</a>
                 <a class="admin-nav-item" href="#writing">文章管理</a>
                 <a class="admin-nav-item" href="#library">读书管理</a>
                 <a class="admin-nav-item" href="#deploy">部署设置</a>
@@ -98,29 +99,6 @@
                     </section>
 
                     <section class="setting-block">
-                        <h3>首页下方板块背景</h3>
-                        <div class="control-grid home-bubble-background-controls">
-                            <div class="control-group control-group-wide">
-                                <label for="home-bubbles-essays-bg">随笔板块背景图链接</label>
-                                <input type="url" id="home-bubbles-essays-bg" placeholder="https://example.com/essays.jpg" autocomplete="url" spellcheck="false">
-                            </div>
-                            <div class="control-group control-group-wide">
-                                <label for="home-bubbles-tech-bg">技术板块背景图链接</label>
-                                <input type="url" id="home-bubbles-tech-bg" placeholder="https://example.com/tech.jpg" autocomplete="url" spellcheck="false">
-                            </div>
-                            <div class="control-group control-group-wide">
-                                <label for="home-bubbles-books-bg">书单板块背景图链接</label>
-                                <input type="url" id="home-bubbles-books-bg" placeholder="https://example.com/books.jpg" autocomplete="url" spellcheck="false">
-                            </div>
-                        </div>
-                        <div class="appearance-actions">
-                            <button class="btn btn-secondary" id="save-home-bubble-backgrounds" type="button">保存首页板块背景图</button>
-                            <button class="btn btn-secondary" id="reset-home-bubble-backgrounds" type="button">恢复默认</button>
-                        </div>
-                        <div class="status-line" id="home-bubble-background-status" style="margin-top:14px">不设置时，板块保持当前样式</div>
-                    </section>
-
-                    <section class="setting-block">
                         <h3>背景图</h3>
                         <div class="preset-grid">
                             <button class="preset-card active" type="button" data-image="assets/bg-mist-morning.jpg" style="background-image:url('../assets/bg-mist-morning.jpg')">
@@ -185,6 +163,178 @@
                         <div class="status-line" id="status-line" style="margin-top:14px">当前保存方式：本机浏览器</div>
                     </section>
                 </div>
+            </section>
+
+            <section id="home-bubbles" class="admin-section">
+                <h2>首页气泡</h2>
+                <p>统一设置首页下方三个板块的封面内容、背景图和字体。保存方式当前为本机浏览器。</p>
+
+                <form id="home-bubble-settings-form" class="home-bubble-settings-form">
+                    <div class="home-bubble-settings-layout">
+                        <section class="setting-block">
+                            <div class="setting-block-head">
+                                <h3>随笔板块</h3>
+                                <span class="board-count">首页左侧竖向卡片</span>
+                            </div>
+                            <div class="control-grid home-bubble-control-grid">
+                                <div class="control-group">
+                                    <label for="bubble-essays-eyebrow">小标题</label>
+                                    <input type="text" id="bubble-essays-eyebrow" autocomplete="off">
+                                </div>
+                                <div class="control-group">
+                                    <label for="bubble-essays-title">主标题</label>
+                                    <input type="text" id="bubble-essays-title" autocomplete="off">
+                                </div>
+                                <div class="control-group control-group-wide">
+                                    <label for="bubble-essays-description">说明文字</label>
+                                    <textarea id="bubble-essays-description" rows="3"></textarea>
+                                </div>
+                                <div class="control-group control-group-wide">
+                                    <label for="bubble-essays-bg">背景图链接</label>
+                                    <input type="url" id="bubble-essays-bg" placeholder="https://example.com/essays.jpg" autocomplete="url" spellcheck="false">
+                                </div>
+                                <div class="control-group">
+                                    <label for="bubble-essays-title-color">标题颜色</label>
+                                    <input type="color" id="bubble-essays-title-color" value="#17201f">
+                                </div>
+                                <div class="control-group">
+                                    <label for="bubble-essays-text-color">正文字色</label>
+                                    <input type="color" id="bubble-essays-text-color" value="#35413f">
+                                </div>
+                                <div class="control-group">
+                                    <label for="bubble-essays-title-size">标题字号 <output id="bubble-essays-title-size-value">24px</output></label>
+                                    <input type="range" id="bubble-essays-title-size" min="16" max="36" step="1" value="24">
+                                </div>
+                                <div class="control-group">
+                                    <label for="bubble-essays-text-size">正文字号 <output id="bubble-essays-text-size-value">16px</output></label>
+                                    <input type="range" id="bubble-essays-text-size" min="12" max="24" step="1" value="16">
+                                </div>
+                                <div class="control-group">
+                                    <label for="bubble-essays-weight">字重</label>
+                                    <select id="bubble-essays-weight">
+                                        <option value="400">常规</option>
+                                        <option value="500">中等</option>
+                                        <option value="600">半粗</option>
+                                        <option value="700" selected>粗体</option>
+                                        <option value="800">特粗</option>
+                                    </select>
+                                </div>
+                            </div>
+                        </section>
+
+                        <section class="setting-block">
+                            <div class="setting-block-head">
+                                <h3>技术板块</h3>
+                                <span class="board-count">首页右上卡片</span>
+                            </div>
+                            <div class="control-grid home-bubble-control-grid">
+                                <div class="control-group">
+                                    <label for="bubble-tech-eyebrow">小标题</label>
+                                    <input type="text" id="bubble-tech-eyebrow" autocomplete="off">
+                                </div>
+                                <div class="control-group">
+                                    <label for="bubble-tech-title">主标题</label>
+                                    <input type="text" id="bubble-tech-title" autocomplete="off">
+                                </div>
+                                <div class="control-group control-group-wide">
+                                    <label for="bubble-tech-description">说明文字</label>
+                                    <textarea id="bubble-tech-description" rows="3"></textarea>
+                                </div>
+                                <div class="control-group control-group-wide">
+                                    <label for="bubble-tech-bg">背景图链接</label>
+                                    <input type="url" id="bubble-tech-bg" placeholder="https://example.com/tech.jpg" autocomplete="url" spellcheck="false">
+                                </div>
+                                <div class="control-group">
+                                    <label for="bubble-tech-title-color">标题颜色</label>
+                                    <input type="color" id="bubble-tech-title-color" value="#17201f">
+                                </div>
+                                <div class="control-group">
+                                    <label for="bubble-tech-text-color">正文字色</label>
+                                    <input type="color" id="bubble-tech-text-color" value="#35413f">
+                                </div>
+                                <div class="control-group">
+                                    <label for="bubble-tech-title-size">标题字号 <output id="bubble-tech-title-size-value">24px</output></label>
+                                    <input type="range" id="bubble-tech-title-size" min="16" max="36" step="1" value="24">
+                                </div>
+                                <div class="control-group">
+                                    <label for="bubble-tech-text-size">正文字号 <output id="bubble-tech-text-size-value">16px</output></label>
+                                    <input type="range" id="bubble-tech-text-size" min="12" max="24" step="1" value="16">
+                                </div>
+                                <div class="control-group">
+                                    <label for="bubble-tech-weight">字重</label>
+                                    <select id="bubble-tech-weight">
+                                        <option value="400">常规</option>
+                                        <option value="500">中等</option>
+                                        <option value="600">半粗</option>
+                                        <option value="700" selected>粗体</option>
+                                        <option value="800">特粗</option>
+                                    </select>
+                                </div>
+                            </div>
+                        </section>
+
+                        <section class="setting-block">
+                            <div class="setting-block-head">
+                                <h3>本周书单板块</h3>
+                                <span class="board-count">首页右下封面卡片</span>
+                            </div>
+                            <div class="control-grid home-bubble-control-grid">
+                                <div class="control-group">
+                                    <label for="bubble-books-eyebrow">小标题</label>
+                                    <input type="text" id="bubble-books-eyebrow" autocomplete="off">
+                                </div>
+                                <div class="control-group">
+                                    <label for="bubble-books-title">主标题</label>
+                                    <input type="text" id="bubble-books-title" autocomplete="off">
+                                </div>
+                                <div class="control-group control-group-wide">
+                                    <label for="bubble-books-subtitle">封面文字</label>
+                                    <textarea id="bubble-books-subtitle" rows="3"></textarea>
+                                </div>
+                                <div class="control-group control-group-wide">
+                                    <label for="bubble-books-cover-image">封面图片链接</label>
+                                    <input type="url" id="bubble-books-cover-image" placeholder="可选，留空则显示文字封面" autocomplete="url" spellcheck="false">
+                                </div>
+                                <div class="control-group control-group-wide">
+                                    <label for="bubble-books-bg">背景图链接</label>
+                                    <input type="url" id="bubble-books-bg" placeholder="https://example.com/books.jpg" autocomplete="url" spellcheck="false">
+                                </div>
+                                <div class="control-group">
+                                    <label for="bubble-books-title-color">标题颜色</label>
+                                    <input type="color" id="bubble-books-title-color" value="#17201f">
+                                </div>
+                                <div class="control-group">
+                                    <label for="bubble-books-text-color">正文字色</label>
+                                    <input type="color" id="bubble-books-text-color" value="#35413f">
+                                </div>
+                                <div class="control-group">
+                                    <label for="bubble-books-title-size">标题字号 <output id="bubble-books-title-size-value">22px</output></label>
+                                    <input type="range" id="bubble-books-title-size" min="16" max="34" step="1" value="22">
+                                </div>
+                                <div class="control-group">
+                                    <label for="bubble-books-text-size">正文字号 <output id="bubble-books-text-size-value">15px</output></label>
+                                    <input type="range" id="bubble-books-text-size" min="12" max="24" step="1" value="15">
+                                </div>
+                                <div class="control-group">
+                                    <label for="bubble-books-weight">字重</label>
+                                    <select id="bubble-books-weight">
+                                        <option value="400">常规</option>
+                                        <option value="500">中等</option>
+                                        <option value="600">半粗</option>
+                                        <option value="700" selected>粗体</option>
+                                        <option value="800">特粗</option>
+                                    </select>
+                                </div>
+                            </div>
+                        </section>
+                    </div>
+
+                    <div class="appearance-actions">
+                        <button class="btn btn-primary" id="save-home-bubble-settings" type="submit">保存首页气泡设置</button>
+                        <button class="btn btn-secondary" id="reset-home-bubble-settings" type="button">恢复默认</button>
+                    </div>
+                    <div class="status-line" id="home-bubble-settings-status" style="margin-top:12px">当前保存方式：本机浏览器</div>
+                </form>
             </section>
 
             <section id="writing" class="admin-section">

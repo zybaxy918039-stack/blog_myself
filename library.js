@@ -3,6 +3,7 @@
 
   const WEEKLY_BOOKS_KEY = "blogWeeklyBooks";
   const BOOK_REVIEWS_KEY = "blogBookReviews";
+  const WEEKLY_COVER_KEY = "blogWeeklyCover";
 
   const DEFAULT_WEEKLY_BOOKS = [
     {
@@ -42,6 +43,12 @@
     }
   ];
 
+  const DEFAULT_WEEKLY_COVER = {
+    image: "",
+    title: "本周书单",
+    subtitle: "在读书与摘录之间，留下一小块慢下来的地方。"
+  };
+
   function escapeHtml(value) {
     return String(value ?? "")
       .replace(/&/g, "&amp;")
@@ -62,6 +69,23 @@
     return JSON.parse(JSON.stringify(value));
   }
 
+  function readObject(key) {
+    try {
+      const raw = localStorage.getItem(key);
+      if (!raw) return null;
+      const parsed = JSON.parse(raw);
+      return parsed && typeof parsed === "object" && !Array.isArray(parsed)
+        ? parsed
+        : null;
+    } catch (error) {
+      return null;
+    }
+  }
+
+  function writeObject(key, value) {
+    localStorage.setItem(key, JSON.stringify(value));
+  }
+
   function readList(key) {
     try {
       const raw = localStorage.getItem(key);
@@ -79,6 +103,21 @@
 
   function getWeeklyBooks() {
     return readList(WEEKLY_BOOKS_KEY) || clone(DEFAULT_WEEKLY_BOOKS);
+  }
+
+  function getWeeklyCover() {
+    return {
+      ...DEFAULT_WEEKLY_COVER,
+      ...(readObject(WEEKLY_COVER_KEY) || {})
+    };
+  }
+
+  function saveWeeklyCover(cover) {
+    writeObject(WEEKLY_COVER_KEY, {
+      image: String(cover.image || "").trim(),
+      title: String(cover.title || "").trim(),
+      subtitle: String(cover.subtitle || "").trim()
+    });
   }
 
   function getBookReviews() {
@@ -118,6 +157,24 @@
         `;
       })
       .join("");
+  }
+
+  function renderWeeklyCover(container) {
+    if (!container) return;
+    const cover = getWeeklyCover();
+    const image = cover.image
+      ? `<img class="home-weekly-cover-image" src="${escapeHtml(cover.image)}" alt="">`
+      : `<div class="home-weekly-cover-image home-weekly-cover-placeholder">读</div>`;
+
+    container.innerHTML = `
+      <article class="home-weekly-cover">
+        ${image}
+        <div class="home-weekly-cover-copy">
+          <div class="home-weekly-cover-title">${escapeHtml(cover.title || "本周书单")}</div>
+          <p>${escapeHtml(cover.subtitle || "")}</p>
+        </div>
+      </article>
+    `;
   }
 
   function renderBookReviews(container, reviews, limit) {
@@ -163,11 +220,7 @@
   }
 
   function renderHome() {
-    renderWeeklyBooks(
-      document.getElementById("home-weekly-books"),
-      getWeeklyBooks(),
-      3
-    );
+    renderWeeklyCover(document.getElementById("home-weekly-books"));
   }
 
   function renderBooksPage() {
@@ -354,6 +407,37 @@
     if (!root || adminBound) return;
     adminBound = true;
 
+    const coverForm = document.getElementById("weekly-cover-form");
+    if (coverForm) {
+      const cover = getWeeklyCover();
+      document.getElementById("weekly-cover-title").value = cover.title || "";
+      document.getElementById("weekly-cover-subtitle").value = cover.subtitle || "";
+      document.getElementById("weekly-cover-image").value = cover.image || "";
+
+      coverForm.addEventListener("submit", (event) => {
+        event.preventDefault();
+        saveWeeklyCover({
+          image: document.getElementById("weekly-cover-image").value,
+          title: document.getElementById("weekly-cover-title").value,
+          subtitle: document.getElementById("weekly-cover-subtitle").value
+        });
+        const statusLine = document.getElementById("weekly-cover-status");
+        if (statusLine) statusLine.textContent = "首页书单封面已保存";
+      });
+
+      const resetCoverButton = document.getElementById("reset-weekly-cover");
+      if (resetCoverButton) {
+        resetCoverButton.addEventListener("click", () => {
+          document.getElementById("weekly-cover-title").value = DEFAULT_WEEKLY_COVER.title;
+          document.getElementById("weekly-cover-subtitle").value = DEFAULT_WEEKLY_COVER.subtitle;
+          document.getElementById("weekly-cover-image").value = DEFAULT_WEEKLY_COVER.image;
+          saveWeeklyCover(DEFAULT_WEEKLY_COVER);
+          const statusLine = document.getElementById("weekly-cover-status");
+          if (statusLine) statusLine.textContent = "首页书单封面已恢复默认";
+        });
+      }
+    }
+
     renderAdminWeekly();
     renderAdminReviews();
 
@@ -429,8 +513,10 @@
 
   window.BlogLibrary = {
     getWeeklyBooks,
+    getWeeklyCover,
     getBookReviews,
     saveWeeklyBooks,
+    saveWeeklyCover,
     saveBookReviews,
     renderHome,
     renderBooksPage,
