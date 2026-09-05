@@ -1,6 +1,7 @@
 const APPEARANCE_KEY = "blogAppearance";
 const HOME_PROFILE_KEY = "blogHomeProfile";
 const MUSIC_KEY = "blogMusic";
+const HOME_BUBBLE_BACKGROUNDS_KEY = "blogHomeBubbleBackgrounds";
 
 const DEFAULT_APPEARANCE = {
   siteTitle: "雾中书桌",
@@ -24,6 +25,12 @@ const DEFAULT_MUSIC = {
   title: "未设置音乐",
   artist: "",
   url: ""
+};
+
+const DEFAULT_HOME_BUBBLE_BACKGROUNDS = {
+  essays: "",
+  tech: "",
+  books: ""
 };
 
 function applySiteIdentity(title, subtitle) {
@@ -56,6 +63,42 @@ function getSavedHomeContent() {
   } catch (error) {
     return { profile: {}, music: {} };
   }
+}
+
+function getSavedHomeBubbleBackgrounds() {
+  try {
+    const raw = localStorage.getItem(HOME_BUBBLE_BACKGROUNDS_KEY);
+    if (!raw) return {};
+    return JSON.parse(raw);
+  } catch (error) {
+    return {};
+  }
+}
+
+function applyHomeBubbleBackgrounds() {
+  const saved = getSavedHomeBubbleBackgrounds();
+  const backgrounds = {
+    ...DEFAULT_HOME_BUBBLE_BACKGROUNDS,
+    ...saved
+  };
+  const bubbles = [
+    { key: "essays", selector: ".home-bubble-essays" },
+    { key: "tech", selector: ".home-bubble-tech" },
+    { key: "books", selector: ".home-bubble-books" }
+  ];
+
+  bubbles.forEach(({ key, selector }) => {
+    const bubble = document.querySelector(selector);
+    if (!bubble) return;
+    const image = String(backgrounds[key] || "").trim();
+    if (image) {
+      bubble.style.backgroundImage = `url("${image}")`;
+      bubble.classList.add("has-custom-background");
+    } else {
+      bubble.style.backgroundImage = "";
+      bubble.classList.remove("has-custom-background");
+    }
+  });
 }
 
 function applyHomeContent() {
@@ -394,13 +437,66 @@ function initHomeContentControls() {
   }
 }
 
+function initHomeBubbleBackgroundControls() {
+  const essaysInput = document.getElementById("home-bubbles-essays-bg");
+  const techInput = document.getElementById("home-bubbles-tech-bg");
+  const booksInput = document.getElementById("home-bubbles-books-bg");
+  const statusLine = document.getElementById("home-bubble-background-status");
+  if (!essaysInput || !techInput || !booksInput) return;
+
+  const saved = getSavedHomeBubbleBackgrounds();
+  const backgrounds = {
+    ...DEFAULT_HOME_BUBBLE_BACKGROUNDS,
+    ...saved
+  };
+  essaysInput.value = backgrounds.essays || "";
+  techInput.value = backgrounds.tech || "";
+  booksInput.value = backgrounds.books || "";
+
+  const saveButton = document.getElementById("save-home-bubble-backgrounds");
+  if (saveButton) {
+    saveButton.addEventListener("click", () => {
+      const next = {
+        essays: essaysInput.value.trim(),
+        tech: techInput.value.trim(),
+        books: booksInput.value.trim()
+      };
+      try {
+        localStorage.setItem(HOME_BUBBLE_BACKGROUNDS_KEY, JSON.stringify(next));
+        applyHomeBubbleBackgrounds();
+        if (statusLine) statusLine.textContent = "首页板块背景图已保存";
+      } catch (error) {
+        if (statusLine) statusLine.textContent = "浏览器未允许保存";
+      }
+    });
+  }
+
+  const resetButton = document.getElementById("reset-home-bubble-backgrounds");
+  if (resetButton) {
+    resetButton.addEventListener("click", () => {
+      try {
+        localStorage.removeItem(HOME_BUBBLE_BACKGROUNDS_KEY);
+      } catch (error) {
+        // Ignore unavailable storage.
+      }
+      essaysInput.value = DEFAULT_HOME_BUBBLE_BACKGROUNDS.essays;
+      techInput.value = DEFAULT_HOME_BUBBLE_BACKGROUNDS.tech;
+      booksInput.value = DEFAULT_HOME_BUBBLE_BACKGROUNDS.books;
+      applyHomeBubbleBackgrounds();
+      if (statusLine) statusLine.textContent = "已恢复默认板块背景";
+    });
+  }
+}
+
 document.addEventListener("DOMContentLoaded", function () {
   applyAppearance();
   applyHomeContent();
+  applyHomeBubbleBackgrounds();
   initRipple();
   initFilters();
   initAppearanceControls();
   initHomeContentControls();
+  initHomeBubbleBackgroundControls();
 
   document.querySelectorAll('a[href^="#"]').forEach((anchor) => {
     anchor.addEventListener("click", (event) => {

@@ -98,6 +98,29 @@
                     </section>
 
                     <section class="setting-block">
+                        <h3>首页下方板块背景</h3>
+                        <div class="control-grid home-bubble-background-controls">
+                            <div class="control-group control-group-wide">
+                                <label for="home-bubbles-essays-bg">随笔板块背景图链接</label>
+                                <input type="url" id="home-bubbles-essays-bg" placeholder="https://example.com/essays.jpg" autocomplete="url" spellcheck="false">
+                            </div>
+                            <div class="control-group control-group-wide">
+                                <label for="home-bubbles-tech-bg">技术板块背景图链接</label>
+                                <input type="url" id="home-bubbles-tech-bg" placeholder="https://example.com/tech.jpg" autocomplete="url" spellcheck="false">
+                            </div>
+                            <div class="control-group control-group-wide">
+                                <label for="home-bubbles-books-bg">书单板块背景图链接</label>
+                                <input type="url" id="home-bubbles-books-bg" placeholder="https://example.com/books.jpg" autocomplete="url" spellcheck="false">
+                            </div>
+                        </div>
+                        <div class="appearance-actions">
+                            <button class="btn btn-secondary" id="save-home-bubble-backgrounds" type="button">保存首页板块背景图</button>
+                            <button class="btn btn-secondary" id="reset-home-bubble-backgrounds" type="button">恢复默认</button>
+                        </div>
+                        <div class="status-line" id="home-bubble-background-status" style="margin-top:14px">不设置时，板块保持当前样式</div>
+                    </section>
+
+                    <section class="setting-block">
                         <h3>背景图</h3>
                         <div class="preset-grid">
                             <button class="preset-card active" type="button" data-image="assets/bg-mist-morning.jpg" style="background-image:url('../assets/bg-mist-morning.jpg')">
