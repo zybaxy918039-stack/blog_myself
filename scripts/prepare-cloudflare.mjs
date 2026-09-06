@@ -109,8 +109,9 @@ async function writeConfig(databaseId) {
     `bucket_name = "${r2Bucket}"`,
     ""
   ];
-  await writeFile(path.resolve("wrangler.ci.toml"), lines.join("\n"), "utf8");
-  console.log(`wrangler.ci.toml written for Pages project: ${projectName}`);
+  // Pages 不接受自定义配置文件路径，因此把 D1/R2 绑定写进默认的 wrangler.toml。
+  await writeFile(path.resolve("wrangler.toml"), lines.join("\n"), "utf8");
+  console.log(`wrangler.toml written for Pages project: ${projectName}`);
 }
 
 async function main() {

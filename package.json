@@ -7,7 +7,7 @@
   "scripts": {
     "build": "node scripts/build.mjs",
     "prepare:cloudflare": "node scripts/prepare-cloudflare.mjs",
-    "deploy": "node scripts/prepare-cloudflare.mjs && node scripts/build.mjs && wrangler pages deploy --branch main --config wrangler.ci.toml"
+    "deploy": "node scripts/prepare-cloudflare.mjs && node scripts/build.mjs && wrangler pages deploy dist --branch main"
   },
   "devDependencies": {
     "cheerio": "^1.1.0",
