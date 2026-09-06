@@ -77,6 +77,22 @@ async function ensureR2() {
   console.log(`R2 bucket created: ${r2Bucket}`);
 }
 
+async function ensurePagesProject() {
+  const projects = await apiRequest(`/accounts/${accountId}/pages/projects`);
+  const existing = Array.isArray(projects)
+    ? projects.find((item) => item.name === projectName)
+    : null;
+  if (existing) {
+    console.log(`Pages project exists: ${projectName}`);
+    return;
+  }
+  const created = await apiRequest(`/accounts/${accountId}/pages/projects`, {
+    method: "POST",
+    body: JSON.stringify({ name: projectName, production_branch: "main" })
+  });
+  console.log(`Pages project created: ${projectName} (${created.id})`);
+}
+
 function runWrangler(args) {
   return new Promise((resolve, reject) => {
     const executable = process.platform === "win32" ? "npx.cmd" : "npx";
@@ -118,6 +134,7 @@ async function main() {
   requireConfig();
   const databaseId = await ensureD1();
   await ensureR2();
+  await ensurePagesProject();
   console.log("applying migrations/0001_init.sql to remote D1 ...");
   await runWrangler([
     "wrangler",
