@@ -95,7 +95,7 @@
                             <button class="btn btn-secondary" id="save-home-content" type="button">保存首页内容</button>
                             <button class="btn btn-secondary" id="reset-home-content" type="button">恢复默认</button>
                         </div>
-                        <div class="status-line" id="home-content-status" style="margin-top:14px">当前保存方式：本机浏览器</div>
+                        <div class="status-line" id="home-content-status" style="margin-top:14px">当前保存方式：Cloudflare D1 永久保存</div>
                     </section>
 
                     <section class="setting-block">
@@ -160,14 +160,14 @@
                             <button class="btn btn-secondary" id="reset-appearance" type="button">恢复默认</button>
                             <button class="btn btn-secondary" type="button" disabled title="接入 Cloudflare R2 后可用">上传背景图</button>
                         </div>
-                        <div class="status-line" id="status-line" style="margin-top:14px">当前保存方式：本机浏览器</div>
+                        <div class="status-line" id="status-line" style="margin-top:14px">当前保存方式：Cloudflare D1 永久保存</div>
                     </section>
                 </div>
             </section>
 
             <section id="home-bubbles" class="admin-section">
                 <h2>首页气泡</h2>
-                <p>统一设置首页下方三个板块的封面内容、背景图和字体。保存方式当前为本机浏览器。</p>
+                <p>统一设置首页下方三个板块的封面内容、背景图和字体。修改会永久保存到 Cloudflare D1。</p>
 
                 <form id="home-bubble-settings-form" class="home-bubble-settings-form">
                     <div class="home-bubble-settings-layout">
@@ -333,7 +333,7 @@
                         <button class="btn btn-primary" id="save-home-bubble-settings" type="submit">保存首页气泡设置</button>
                         <button class="btn btn-secondary" id="reset-home-bubble-settings" type="button">恢复默认</button>
                     </div>
-                    <div class="status-line" id="home-bubble-settings-status" style="margin-top:12px">当前保存方式：本机浏览器</div>
+                    <div class="status-line" id="home-bubble-settings-status" style="margin-top:12px">当前保存方式：Cloudflare D1 永久保存</div>
                 </form>
             </section>
 
@@ -398,12 +398,24 @@
                             <span>发布文章</span>
                         </button>
                     </div>
+                    <div class="status-line" id="article-status" style="margin-top:12px">文章会直接保存到 Cloudflare D1</div>
+                </div>
+                <div class="admin-article-list-wrap">
+                    <div class="section-header">
+                        <div>
+                            <div class="eyebrow">已写文章</div>
+                            <h3>文章列表</h3>
+                        </div>
+                        <span class="board-count" id="article-count">0 篇</span>
+                    </div>
+                    <div id="article-admin-list" class="library-admin-list library-admin-list-stacked"></div>
                 </div>
             </section>
 
             <section id="library" class="admin-section">
                 <h2>读书管理</h2>
                 <p>在这里维护本周书单，并为每本书创建独立摘录分区。</p>
+                <div class="status-line" id="library-status" style="margin-bottom:16px">书单与书评会直接保存到 Cloudflare D1</div>
 
                 <div class="library-manager">
                     <section class="setting-block">
@@ -509,10 +521,7 @@
             </footer>
         </main>
     </div>
-    <script src="../library.js"></script>
-    <script src="../script.js"></script>
     <script src="auth.js"></script>
-    <script src="admin.js"></script>
-    <script src="../edit.js"></script>
+    <script src="admin-app.js"></script>
 </body>
 </html>

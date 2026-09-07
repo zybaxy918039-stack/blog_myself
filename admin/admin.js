@@ -1,8 +1,9 @@
 (function () {
   "use strict";
 
-  document.addEventListener("DOMContentLoaded", function () {
-    if (!window.AdminAuth || !window.AdminAuth.requireAuth()) return;
+  document.addEventListener("DOMContentLoaded", async function () {
+    if (!window.AdminAuth) return;
+    if (!(await window.AdminAuth.requireAuth())) return;
 
     const logoutButton = document.getElementById("logout-btn");
     if (logoutButton) {

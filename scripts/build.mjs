@@ -52,10 +52,6 @@ function escapeHtml(value) {
     .replace(/'/g, "&#039;");
 }
 
-function escapeJsonForHtml(value) {
-  return JSON.stringify(value).replace(/</g, "\\u003c");
-}
-
 function slugify(value) {
   const base = String(value || "untitled")
     .trim()
@@ -112,6 +108,7 @@ async function readMarkdownPosts() {
     const meta = CATEGORIES[category] || CATEGORIES.essays;
 
     posts.push({
+      id: `repo-${slug}`,
       slug,
       category,
       categoryName: meta.name,
@@ -120,33 +117,20 @@ async function readMarkdownPosts() {
       summary: String(data.summary || data.description || "").trim(),
       tags: Array.isArray(data.tags) ? data.tags.map(String) : [],
       cover: String(data.cover || "").trim(),
+      markdown: content,
       bodyHtml: marked.parse(content, {
         gfm: true,
         breaks: true
       }),
+      status: "published",
+      origin: "repo",
+      updatedAt: String(data.updatedAt || data.date || ""),
+      createdAt: String(data.date || ""),
       sortDate: String(data.date || "")
     });
   }
   posts.sort((a, b) => (b.sortDate || "").localeCompare(a.sortDate || "") || a.title.localeCompare(b.title));
   return posts;
-}
-
-function injectSiteData($, siteData) {
-  const jsonScript = `<script id="site-data-json" type="application/json">${escapeJsonForHtml(siteData)}</script>`;
-  const seedScript = '<script src="site-data.js"></script>';
-  const anchors = [
-    'script[src="library.js"]',
-    'script[src="../library.js"]',
-    'script[src="script.js"]',
-    'script[src="../script.js"]'
-  ];
-  for (const selector of anchors) {
-    const anchor = $(selector).first();
-    if (anchor.length) {
-      anchor.before(`${jsonScript}${seedScript}`);
-      return;
-    }
-  }
 }
 
 const ARTICLE_TEMPLATE = `<!DOCTYPE html>
@@ -228,7 +212,6 @@ function renderArticlePage(post, siteData) {
       : ""
   );
   $('[data-field="body"]').html(post.bodyHtml);
-  injectSiteData($, siteData);
   return $.html();
 }
 
@@ -272,7 +255,6 @@ function renderCategoryPage(sourceHtml, posts, category, siteData) {
     }
   }
 
-  injectSiteData($, siteData);
   return $.html();
 }
 
@@ -348,11 +330,9 @@ async function copyStaticEntries() {
     "style.css",
     "deploy.css",
     "deploy.js",
-    "library.js",
     "script.js",
     "edit.css",
     "edit.js",
-    "site-data.js",
     "assets",
     "admin",
     "posts"
@@ -398,6 +378,13 @@ async function prepare() {
   const posts = await readMarkdownPosts();
   await copyStaticEntries();
 
+  await mkdir(path.join(DIST, "data"), { recursive: true });
+  await writeFile(
+    path.join(DIST, "data", "posts.json"),
+    JSON.stringify(posts, null, 2),
+    "utf8"
+  );
+
   await mkdir(path.join(DIST, "posts"), { recursive: true });
   for (const post of posts) {
     const target = path.join(DIST, "posts", `${post.slug}.html`);
@@ -420,7 +407,6 @@ async function prepare() {
     const source = await readFile(path.join(ROOT, "ai-art.html"), "utf8");
     const output = renderGalleryBoards(source, groups);
     const $ = cheerio.load(output);
-    injectSiteData($, siteData);
     await writeFile(path.join(DIST, "ai-art.html"), $.html(), "utf8");
   }
 
@@ -433,7 +419,6 @@ async function prepare() {
     ["about.html", aboutSource]
   ]) {
     const $ = cheerio.load(source);
-    injectSiteData($, siteData);
     await writeFile(path.join(DIST, file), $.html(), "utf8");
   }
 
