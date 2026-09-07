@@ -1,33 +1,48 @@
 # 雾中书桌 - 个人博客
 
-一个混合型个人博客：随笔、小说草稿、技术笔记、AI 绘图和读书摘录。站点是纯静态页面，部署在 Cloudflare Pages，由 GitHub Actions 在每次推送时自动构建上线。
+一个混合型个人博客：随笔、小说草稿、技术笔记、AI 绘图和读书摘录。站点采用 Cloudflare Pages Functions 服务端渲染（SSR）+ Cloudflare D1 持久化：所有公开页面由服务端模板渲染，后台的外观、首页气泡、书单、书评与文章全部写入 D1，不依赖浏览器 localStorage。
 
 ## 结构
 
 ```
 blog/
-├── index.html          # 首页
-├── essays.html         # 随笔分类页
-├── fiction.html        # 小说分类页
-├── tech.html           # 技术分类页
-├── ai-art.html         # AI 绘图页
-├── books.html          # 读书页
-├── about.html          # 关于页
-├── deploy.html         # 首次部署辅助页（前台导航不显示）
-├── admin/              # 隐藏管理后台，通过 /admin/ 访问
+├── functions/              # Pages Functions：SSR 页面渲染 + 后台 API
+│   ├── [[path]].js         # 路由入口（公开页 SSR、/api/admin/* 接口）
+│   └── _lib/
+│       ├── templates.mjs   # 所有公开页面的 SSR 模板
+│       ├── site-data.mjs   # D1 读取、站点数据合并与默认值
+│       ├── markdown.mjs    # Markdown 渲染
+│       ├── auth.mjs        # 后台会话认证
+│       └── http.mjs        # 响应辅助
+├── admin/                  # 隐藏管理后台，通过 /admin/ 访问（前台导航不显示）
 ├── content/
-│   ├── posts/          # Markdown 文章源
-│   ├── uploads/        # 上传的图片与 AI 绘图
+│   ├── posts/              # Markdown 文章源（构建时生成 data/posts.json）
+│   ├── uploads/            # 上传的图片与 AI 绘图
 │   └── data/
-│       └── site-data.json  # 外观、首页气泡、书单等仓库级默认配置
-├── migrations/         # D1 初始表结构
-├── scripts/            # 构建与 Cloudflare 资源准备脚本
-└── .github/workflows/  # 自动部署工作流
+│       └── site-data.json  # 仓库级默认配置参考快照
+├── migrations/             # D1 初始表结构
+├── scripts/                # 构建与 Cloudflare 资源准备脚本
+└── .github/workflows/      # 自动部署工作流
 ```
+
+## 数据与保存方式
+
+- 所有站点配置（外观、个人资料、音乐、首页气泡、书单、书评）保存在 D1 `settings` 表；后台发布的文章与草稿保存在 D1 `articles` 表；评论与上传元数据分别使用 `comments`、`uploads` 表。
+- 公开页面由 Functions 从 D1 读取数据后由 `functions/_lib/templates.mjs` 服务端渲染，不注入任何 `site-data-json`，也不向 localStorage 写入覆盖值。
+- 后台所有写操作都通过 `/api/admin/*` 接口落到 D1；附件与上传图片走 R2 存储桶（绑定名 `BLOG_ATTACHMENTS`）。
+
+D1 中没有对应配置时，使用 `functions/_lib/site-data.mjs` 里 `DEFAULTS` 定义的内置默认值；`content/data/site-data.json` 只是这份默认值的参考快照，不参与运行时读取。
+
+## 关键绑定与环境变量
+
+- D1 绑定：`BLOG_COMMENTS_DB`
+- R2 绑定：`BLOG_ATTACHMENTS`
+- GitHub Secrets：`CLOUDFLARE_API_TOKEN`、`CLOUDFLARE_ACCOUNT_ID`
+- Pages 环境变量：`ADMIN_USERNAME`、`ADMIN_PASSWORD`、`ADMIN_SESSION_SECRET`
 
 ## 写文章
 
-在 `content/posts/` 下新建 `.md` 文件，frontmatter 格式参考 `content/posts/_template.md`：
+仓库文章放在 `content/posts/` 下，frontmatter 格式参考 `content/posts/_template.md`：
 
 ```yaml
 ---
@@ -41,34 +56,19 @@ draft: false
 ---
 ```
 
-`category` 支持 `essays`（随笔）、`fiction`（小说）、`tech`（技术）。`draft: true` 的文章不会进入构建产物。
+`category` 支持 `essays`（随笔）、`fiction`（小说）、`tech`（技术）。`draft: true` 的文章不会进入构建产物。构建时这些 Markdown 会生成 `data/posts.json`，由 SSR 在公开页读取并合并；后台发布的文章则直接写入 D1 `articles` 表。
 
-图片放到 `content/uploads/` 对应目录。AI 绘图页可以维护 `content/uploads/ai-art/manifest.json`，格式如下：
-
-```json
-{
-  "groups": [
-    {
-      "name": "晨雾系列",
-      "images": [
-        { "src": "content/uploads/ai-art/example.jpg", "caption": "雾中清晨" }
-      ]
-    }
-  ]
-}
-```
+图片放到 `content/uploads/` 对应目录。AI 绘图页可以在后台维护画廊分组，或使用仓库级默认分组（定义在 `functions/_lib/site-data.mjs` 的 `DEFAULTS.galleryBoards`）。
 
 ## 本地预览
-
-直接双击根目录的 `index.html` 即可预览（构建注入的站点数据在本地源码中不存在，页面会使用内置默认值）。
-
-也可以完整构建后在本地服务器查看：
 
 ```powershell
 npm install
 npm run build
 npx wrangler pages dev dist
 ```
+
+公开页面由 `functions/` 服务端渲染；本地没有 D1 绑定时会回退到内置默认值，后台写入接口则需要配置 `wrangler.toml` 的 D1 绑定后才能持久化。
 
 ## 首次部署
 
@@ -78,7 +78,7 @@ npx wrangler pages dev dist
    - `CLOUDFLARE_ACCOUNT_ID`
 3. 把这个仓库推送到 GitHub 的 `main` 分支。
 4. Actions 会执行 `prepare-cloudflare.mjs`，自动创建 D1 数据库 `blog-comments-db` 与 R2 存储桶 `blog-attachments`、执行 `migrations/0001_init.sql`，然后构建并部署到 Cloudflare Pages。
-5. 部署成功后，在 Cloudflare Pages 项目中绑定你的自定义域名。之后每次推送都会自动更新线上站点。
+5. 部署成功后，在 Cloudflare Pages 项目设置里配置环境变量 `ADMIN_USERNAME`、`ADMIN_PASSWORD`、`ADMIN_SESSION_SECRET`，再绑定自定义域名。之后每次推送都会自动更新线上站点。
 
 页面项目名默认取 GitHub 仓库名（只保留小写字母、数字和连字符）。如果 Cloudflare 上的项目名不同，在 Secrets 中额外添加 `CLOUDFLARE_PAGES_PROJECT`。
 
@@ -93,4 +93,4 @@ npm run deploy
 
 ## 管理后台
 
-后台位于 `/admin/`，可以管理外观、首页气泡、文章草稿和读书数据。当前后台设置保存在浏览器本地，作为仓库级配置的来源是 `content/data/site-data.json`；正式环境的评论和附件接口后续接入 D1 与 R2。
+后台位于 `/admin/`，可以管理外观、首页气泡、文章草稿和读书数据。所有修改都会通过 `/api/admin/*` 接口写入 Cloudflare D1 `settings` 与 `articles` 表；评论与附件接口使用 D1 与 R2 绑定，不退回浏览器本地存储。
