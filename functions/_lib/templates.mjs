@@ -118,7 +118,7 @@ export function renderPage({
     `<meta charset="UTF-8">\n<meta name="viewport" content="width=device-width, initial-scale=1.0">\n` +
     `<title>${escapeHtml(title)}</title>\n` +
     `<meta name="description" content="${escapeHtml(description)}">\n` +
-    `<link rel="stylesheet" href="/style.css">\n` +
+    `<link rel="stylesheet" href="/style.css?v=20260905-2">\n` +
     `<style>:root{${appearanceStyle(appearance)}}</style>\n` +
     `</head>\n<body${bodyClassAttr}>\n` +
     `<div class="backdrop-layer" aria-hidden="true"></div>\n` +

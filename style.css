@@ -1930,9 +1930,10 @@ input[type="range"] {
 .home-bubble-grid {
   display: grid;
   grid-template-columns: 343px minmax(0, 1fr);
-  grid-template-rows: minmax(240px, 1fr) 210px;
+  grid-template-rows: minmax(240px, auto) auto;
   gap: 18px;
-  height: 500px;
+  min-height: 462px;
+  height: auto;
   align-items: stretch;
 }
 
@@ -1956,9 +1957,9 @@ input[type="range"] {
   grid-column: 1;
   grid-row: 1 / span 2;
   width: 343px;
-  height: 462px;
+  height: auto;
   min-height: 462px;
-  max-height: 462px;
+  max-height: none;
 }
 
 .home-bubble-tech {
