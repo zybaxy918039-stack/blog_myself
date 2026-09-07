@@ -1930,9 +1930,9 @@ input[type="range"] {
 .home-bubble-grid {
   display: grid;
   grid-template-columns: 343px minmax(0, 1fr);
-  grid-template-rows: minmax(240px, 1fr) 172px;
+  grid-template-rows: minmax(240px, 1fr) 210px;
   gap: 18px;
-  height: 462px;
+  height: 500px;
   align-items: stretch;
 }
 
@@ -1973,6 +1973,35 @@ input[type="range"] {
   grid-row: 2;
   min-height: 0;
   margin-top: 0;
+}
+
+.home-bubble-books .mini-list {
+  margin-top: 10px;
+}
+
+.home-bubble-books .home-weekly-cover {
+  min-height: 0;
+  height: auto;
+}
+
+.home-bubble-books .home-weekly-cover-image,
+.home-bubble-books .home-weekly-cover-placeholder {
+  width: 56px;
+  height: 72px;
+}
+
+.home-bubble-books .home-weekly-cover-placeholder {
+  font-size: 1.1rem;
+}
+
+.home-bubble-books .home-weekly-cover-title {
+  font-size: 1rem;
+  margin-bottom: 4px;
+}
+
+.home-bubble-books .home-weekly-cover-copy p {
+  font-size: 0.8rem;
+  line-height: 1.4;
 }
 
 .home-bubble::before {
