@@ -128,14 +128,20 @@
 
     function createRipples() {
       ripple.replaceChildren();
-      const count = 5 + Math.round(strength * 5);
+      const count = 3 + Math.round(strength);
+      const positions = [
+        [18, 24],
+        [74, 28],
+        [36, 76],
+        [84, 72]
+      ];
       for (let i = 0; i < count; i += 1) {
         const drop = document.createElement("span");
         drop.className = "water-drop";
-        drop.style.setProperty("--drop-x", 8 + Math.round(Math.random() * 84) + "%");
-        drop.style.setProperty("--drop-y", 10 + Math.round(Math.random() * 80) + "%");
-        drop.style.setProperty("--drop-size", 62 + Math.round(Math.random() * 70) + "px");
-        drop.style.setProperty("--drop-delay", Math.round(transitionMs * (0.04 + Math.random() * 0.28)) + "ms");
+        drop.style.setProperty("--drop-x", positions[i][0] + "%");
+        drop.style.setProperty("--drop-y", positions[i][1] + "%");
+        drop.style.setProperty("--drop-size", "clamp(260px, 58vmax, 900px)");
+        drop.style.setProperty("--drop-delay", Math.round(transitionMs * (0.02 + i * 0.04 + Math.random() * 0.018)) + "ms");
         for (let ring = 0; ring < 3; ring += 1) {
           drop.appendChild(document.createElement("span"));
         }

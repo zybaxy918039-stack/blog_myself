@@ -1037,7 +1037,6 @@
     var ids = [
       "site-title",
       "site-subtitle",
-      "bg-url",
       "background-slideshow-enabled",
       "background-slideshow-images",
       "background-slideshow-interval",
@@ -1056,7 +1055,7 @@
 
     document.querySelectorAll(".preset-card[data-image]").forEach(function (card) {
       card.addEventListener("click", function () {
-        field("bg-url").value = card.dataset.image || "";
+        field("background-slideshow-images").value = card.dataset.image || "";
         document.querySelectorAll(".preset-card[data-image]").forEach(function (item) {
           item.classList.toggle("active", item === card);
         });
@@ -1067,19 +1066,20 @@
     var saveButton = field("save-appearance");
     if (saveButton) {
       saveButton.addEventListener("click", async function () {
+        var backgroundSlideshow = readBackgroundSlideshow();
+        var fallbackImage = backgroundSlideshow.images[0]
+          || inputFromBackground(state.siteData.appearance.image)
+          || inputFromBackground(DEFAULTS.appearance.image);
         var appearance = {
           siteTitle: field("site-title").value.trim() || DEFAULTS.appearance.siteTitle,
           siteSubtitle: field("site-subtitle").value.trim() || DEFAULTS.appearance.siteSubtitle,
-          image: field("bg-url").value.trim()
-            ? backgroundFromInput(field("bg-url").value)
-            : DEFAULTS.appearance.image,
+          image: backgroundFromInput(fallbackImage),
           backdropOpacity: Number(field("backdrop-opacity-range").value),
           backdropBlur: Number(field("backdrop-blur-range").value),
           panelOpacity: Number(field("panel-opacity-range").value),
           panelBlur: Number(field("panel-blur-range").value),
           contentWidth: Number(field("content-width-range").value)
         };
-        var backgroundSlideshow = readBackgroundSlideshow();
         try {
           await requestJson("/api/admin/site-data", {
             method: "PUT",
@@ -1124,7 +1124,6 @@
     var slideshow = state.siteData.backgroundSlideshow || DEFAULTS.backgroundSlideshow;
     field("site-title").value = appearance.siteTitle;
     field("site-subtitle").value = appearance.siteSubtitle;
-    field("bg-url").value = inputFromBackground(appearance.image);
     field("backdrop-opacity-range").value = appearance.backdropOpacity;
     field("backdrop-blur-range").value = appearance.backdropBlur;
     field("panel-opacity-range").value = appearance.panelOpacity;
@@ -1138,10 +1137,12 @@
     field("background-slideshow-transition").value = (Number(slideshow.transitionMs) || 1800) / 1000;
     field("background-slideshow-strength").value = Number(slideshow.rippleStrength) || 0.68;
 
-    var currentImage = inputFromBackground(appearance.image);
+    var currentImage = Array.isArray(slideshow.images) && slideshow.images.length
+      ? slideshow.images[0]
+      : inputFromBackground(appearance.image);
     document.querySelectorAll(".preset-card[data-image]").forEach(function (card) {
-      var preset = String(card.dataset.image || "").replace(/^\.\.?\//, "").replace(/^\/+/, "");
-      card.classList.toggle("active", preset === currentImage || card.dataset.image === currentImage);
+      var preset = String(card.dataset.image || "");
+      card.classList.toggle("active", preset === currentImage || preset.replace(/^\/+/, "") === String(currentImage || "").replace(/^\/+/, ""));
     });
 
     syncAppearanceOutputs();
@@ -1154,11 +1155,9 @@
       .split(/\r?\n/)
       .map(function (value) { return value.trim(); })
       .filter(Boolean);
-    var nextImage = field("background-slideshow-enabled").checked && slideshowImages.length
+    var nextImage = slideshowImages.length
       ? backgroundFromInput(slideshowImages[0])
-      : field("bg-url").value.trim()
-      ? backgroundFromInput(field("bg-url").value)
-      : DEFAULTS.appearance.image;
+      : (state.siteData.appearance && state.siteData.appearance.image) || DEFAULTS.appearance.image;
     root.style.setProperty("--bg-image", nextImage);
     root.style.setProperty("--backdrop-opacity", field("backdrop-opacity-range").value);
     root.style.setProperty("--backdrop-blur", field("backdrop-blur-range").value + "px");
