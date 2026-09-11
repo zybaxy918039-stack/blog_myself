@@ -161,10 +161,9 @@ body {
   overflow: hidden;
   pointer-events: none;
   background: transparent;
-  --ripple-x: 50%;
-  --ripple-y: 50%;
   --ripple-duration: 1800ms;
   --ripple-strength: 0.68;
+  --lake-blur: 12px;
 }
 
 .background-slide {
@@ -172,7 +171,7 @@ body {
   inset: -2.5%;
   background-position: center;
   background-size: cover;
-  will-change: clip-path, opacity, transform;
+  will-change: filter, opacity, transform;
 }
 
 .background-slide-current {
@@ -183,86 +182,137 @@ body {
   opacity: 0;
 }
 
-.background-slide-next.is-rippling {
-  opacity: 1;
-  filter: url("#water-ripple-filter");
-  animation: water-ripple-reveal var(--ripple-duration) cubic-bezier(0.22, 0.62, 0.24, 1) both;
+.background-slide-current.is-blurring {
+  animation: lake-background-blur var(--ripple-duration) cubic-bezier(0.3, 0.08, 0.35, 1) both;
 }
 
-.background-ripple {
+.background-slide-next.is-settling-in {
+  animation: lake-next-background var(--ripple-duration) ease-in-out both;
+}
+
+.background-ripple-field {
   position: fixed;
-  left: var(--ripple-x);
-  top: var(--ripple-y);
+  inset: 0;
   z-index: 2;
-  width: 1px;
-  height: 1px;
-  opacity: 0;
-  --ripple-x: 50%;
-  --ripple-y: 50%;
+  overflow: hidden;
+  pointer-events: none;
   --ripple-duration: 1800ms;
   --ripple-strength: 0.68;
+  --ripple-opacity: 0.62;
 }
 
-.background-ripple.is-active {
-  opacity: calc(var(--ripple-strength) * 0.42);
-}
-
-.background-ripple span {
+.water-drop {
   position: absolute;
-  left: 0;
-  top: 0;
-  width: 10vmax;
-  height: 10vmax;
-  border: clamp(1px, 0.16vw, 3px) solid rgba(238, 255, 251, 0.78);
+  left: var(--drop-x);
+  top: var(--drop-y);
+  width: var(--drop-size);
+  height: var(--drop-size);
+  transform: translate(-50%, -50%);
+}
+
+.water-drop::before {
+  content: "";
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  width: 5px;
+  height: 5px;
   border-radius: 50%;
-  box-shadow: 0 0 28px rgba(166, 235, 220, 0.34), inset 0 0 28px rgba(166, 235, 220, 0.22);
-  transform: translate(-50%, -50%) scale(0.06);
+  background: rgba(241, 255, 252, 0.88);
+  box-shadow: 0 0 10px rgba(178, 235, 225, 0.72);
+  opacity: 0;
+  transform: translate(-50%, -50%) scale(1.8);
 }
 
-.background-ripple.is-active span {
-  animation: water-ripple-ring var(--ripple-duration) ease-out both;
+.background-ripple-field.is-active .water-drop::before {
+  animation: lake-drop-impact calc(var(--ripple-duration) * 0.22) ease-out var(--drop-delay) both;
 }
 
-.background-ripple.is-active span:nth-child(2) {
-  animation-delay: calc(var(--ripple-duration) * 0.1);
-}
-
-.background-ripple.is-active span:nth-child(3) {
-  animation-delay: calc(var(--ripple-duration) * 0.2);
-}
-
-.background-filter-defs {
+.water-drop span {
   position: absolute;
+  inset: 0;
+  border: 1px solid rgba(42, 122, 116, 0.7);
+  border-radius: 50%;
+  box-shadow: 0 0 0 1px rgba(242, 255, 252, 0.5), 0 0 12px rgba(48, 137, 128, 0.32), inset 0 0 9px rgba(239, 255, 252, 0.34);
+  opacity: 0;
+  transform: scale(0.08);
 }
 
-@keyframes water-ripple-reveal {
+.background-ripple-field.is-active .water-drop span {
+  animation: lake-small-ripple calc(var(--ripple-duration) * 0.54) ease-out var(--drop-delay) both;
+}
+
+.background-ripple-field.is-active .water-drop span:nth-child(2) {
+  animation-delay: calc(var(--drop-delay) + var(--ripple-duration) * 0.07);
+}
+
+.background-ripple-field.is-active .water-drop span:nth-child(3) {
+  animation-delay: calc(var(--drop-delay) + var(--ripple-duration) * 0.14);
+}
+
+@keyframes lake-background-blur {
   0% {
-    -webkit-clip-path: circle(0 at var(--ripple-x) var(--ripple-y));
-    clip-path: circle(0 at var(--ripple-x) var(--ripple-y));
-    transform: scale(1.035);
+    filter: blur(0);
+    opacity: 1;
+    transform: scale(1);
   }
   68% {
-    filter: url("#water-ripple-filter");
+    filter: blur(var(--lake-blur));
+    opacity: 0.88;
+    transform: scale(1.025);
   }
   100% {
-    -webkit-clip-path: circle(150vmax at var(--ripple-x) var(--ripple-y));
-    clip-path: circle(150vmax at var(--ripple-x) var(--ripple-y));
-    filter: none;
+    filter: blur(var(--lake-blur));
+    opacity: 0.42;
+    transform: scale(1.03);
+  }
+}
+
+@keyframes lake-next-background {
+  0%, 62% {
+    opacity: 0;
+    filter: blur(5px);
+    transform: scale(1.02);
+  }
+  100% {
+    opacity: 1;
+    filter: blur(0);
     transform: scale(1);
   }
 }
 
-@keyframes water-ripple-ring {
+@keyframes lake-drop-impact {
+  0% { opacity: 0; transform: translate(-50%, -50%) scale(1.8); }
+  35% { opacity: var(--ripple-opacity); transform: translate(-50%, -50%) scale(0.7); }
+  100% { opacity: 0; transform: translate(-50%, -50%) scale(0.15); }
+}
+
+@keyframes lake-small-ripple {
   0% {
     opacity: 0;
-    transform: translate(-50%, -50%) scale(0.06);
+    transform: scale(0.08);
   }
-  16% {
-    opacity: 1;
+  18% {
+    opacity: var(--ripple-opacity);
   }
   100% {
     opacity: 0;
-    transform: translate(-50%, -50%) scale(3.8);
+    transform: scale(1);
+  }
+}
+
+.backdrop-layer.is-lake-blurring {
+  animation: lake-backdrop-blur var(--ripple-duration) ease-in-out both;
+}
+
+@keyframes lake-backdrop-blur {
+  0% {
+    -webkit-backdrop-filter: blur(var(--backdrop-blur)) saturate(1.12);
+    backdrop-filter: blur(var(--backdrop-blur)) saturate(1.12);
+  }
+  68%, 100% {
+    -webkit-backdrop-filter: blur(calc(var(--backdrop-blur) + var(--lake-transition-blur))) saturate(1.02);
+    backdrop-filter: blur(calc(var(--backdrop-blur) + var(--lake-transition-blur))) saturate(1.02);
   }
 }
 

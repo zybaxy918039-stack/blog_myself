@@ -85,8 +85,9 @@
 
     const current = stage.querySelector(".background-slide-current");
     const next = stage.querySelector(".background-slide-next");
-    const ripple = document.querySelector(".background-ripple");
-    if (!current || !next || !ripple) return;
+    const ripple = document.querySelector(".background-ripple-field");
+    const backdrop = document.querySelector(".backdrop-layer");
+    if (!current || !next || !ripple || !backdrop) return;
 
     const transitionMs = Math.min(6000, Math.max(600, Number(config.transitionMs) || 1800));
     const intervalMs = Math.max(3000, Number(config.intervalMs) || 10000);
@@ -125,6 +126,23 @@
       timer = window.setTimeout(function () { transition(images); }, intervalMs);
     }
 
+    function createRipples() {
+      ripple.replaceChildren();
+      const count = 5 + Math.round(strength * 5);
+      for (let i = 0; i < count; i += 1) {
+        const drop = document.createElement("span");
+        drop.className = "water-drop";
+        drop.style.setProperty("--drop-x", 8 + Math.round(Math.random() * 84) + "%");
+        drop.style.setProperty("--drop-y", 10 + Math.round(Math.random() * 80) + "%");
+        drop.style.setProperty("--drop-size", 62 + Math.round(Math.random() * 70) + "px");
+        drop.style.setProperty("--drop-delay", Math.round(transitionMs * (0.04 + Math.random() * 0.28)) + "ms");
+        for (let ring = 0; ring < 3; ring += 1) {
+          drop.appendChild(document.createElement("span"));
+        }
+        ripple.appendChild(drop);
+      }
+    }
+
     function transition(images) {
       if (running || document.hidden) {
         schedule(images);
@@ -132,28 +150,34 @@
       }
       running = true;
       const nextIndex = (index + 1) % images.length;
-      const x = 24 + Math.round(Math.random() * 52);
-      const y = 24 + Math.round(Math.random() * 48);
-      stage.style.setProperty("--ripple-x", x + "%");
-      stage.style.setProperty("--ripple-y", y + "%");
       stage.style.setProperty("--ripple-duration", transitionMs + "ms");
       stage.style.setProperty("--ripple-strength", String(strength));
-      ripple.style.setProperty("--ripple-x", x + "%");
-      ripple.style.setProperty("--ripple-y", y + "%");
+      stage.style.setProperty("--lake-blur", 6 + Math.round(strength * 10) + "px");
       ripple.style.setProperty("--ripple-duration", transitionMs + "ms");
       ripple.style.setProperty("--ripple-strength", String(strength));
+      ripple.style.setProperty("--ripple-opacity", String(0.25 + strength * 0.55));
+      backdrop.style.setProperty("--ripple-duration", transitionMs + "ms");
+      backdrop.style.setProperty("--lake-transition-blur", 4 + Math.round(strength * 8) + "px");
+      createRipples();
       next.style.backgroundImage = cssImage(images[nextIndex]);
-      next.classList.remove("is-rippling");
+      current.classList.remove("is-blurring");
+      next.classList.remove("is-settling-in");
       ripple.classList.remove("is-active");
-      void next.offsetWidth;
-      next.classList.add("is-rippling");
+      backdrop.classList.remove("is-lake-blurring");
+      void stage.offsetWidth;
+      current.classList.add("is-blurring");
+      next.classList.add("is-settling-in");
       ripple.classList.add("is-active");
+      backdrop.classList.add("is-lake-blurring");
 
       window.setTimeout(function () {
         current.style.backgroundImage = cssImage(images[nextIndex]);
-        next.classList.remove("is-rippling");
+        current.classList.remove("is-blurring");
+        next.classList.remove("is-settling-in");
         next.style.backgroundImage = "";
         ripple.classList.remove("is-active");
+        backdrop.classList.remove("is-lake-blurring");
+        ripple.replaceChildren();
         index = nextIndex;
         running = false;
         schedule(images);

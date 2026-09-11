@@ -117,12 +117,8 @@ function slideshowHtml(siteData) {
     `<div class="background-slideshow" aria-hidden="true">` +
     `<div class="background-slide background-slide-current"></div>` +
     `<div class="background-slide background-slide-next"></div>` +
-    `<svg class="background-filter-defs" width="0" height="0" aria-hidden="true"><defs>` +
-    `<filter id="water-ripple-filter" x="-10%" y="-10%" width="120%" height="120%">` +
-    `<feTurbulence type="fractalNoise" baseFrequency="0.012 0.045" numOctaves="2" seed="7" result="noise"/>` +
-    `<feDisplacementMap in="SourceGraphic" in2="noise" scale="18" xChannelSelector="R" yChannelSelector="B"/>` +
-    `</filter></defs></svg></div>` +
-    `<div class="background-ripple" aria-hidden="true"><span></span><span></span><span></span></div>` +
+    `</div>` +
+    `<div class="background-ripple-field" aria-hidden="true"></div>` +
     `<script id="background-slideshow-data" type="application/json">${json}</script>`
   );
 }
