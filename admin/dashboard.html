@@ -5,8 +5,8 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>管理后台 - 雾中书桌</title>
     <meta name="robots" content="noindex,nofollow">
-    <link rel="stylesheet" href="../style.css?v=20260905-2">
-    <link rel="stylesheet" href="admin.css">
+    <link rel="stylesheet" href="../style.css?v=20260911-1">
+    <link rel="stylesheet" href="admin.css?v=20260911-1">
 </head>
 <body>
     <div class="backdrop-layer" aria-hidden="true"></div>
@@ -114,6 +114,38 @@
                         <div class="control-group" style="margin-top:18px">
                             <label for="bg-url">背景图链接</label>
                             <input type="url" id="bg-url" value="../assets/bg-mist-morning.jpg" autocomplete="url" spellcheck="false">
+                        </div>
+                    </section>
+
+                    <section class="setting-block background-slideshow-settings">
+                        <div class="setting-block-head">
+                            <div>
+                                <h3>多背景轮播</h3>
+                                <p>每行填写一张图片链接。单张背景仍作为加载失败时的后备。</p>
+                            </div>
+                            <label class="slideshow-switch" for="background-slideshow-enabled">
+                                <input type="checkbox" id="background-slideshow-enabled" checked>
+                                <span>启用轮播</span>
+                            </label>
+                        </div>
+                        <div class="control-group">
+                            <label for="background-slideshow-images">背景图片链接</label>
+                            <textarea id="background-slideshow-images" class="slideshow-url-list" rows="6" placeholder="https://example.com/background-1.jpg&#10;https://example.com/background-2.jpg" spellcheck="false"></textarea>
+                            <small>建议至少填写 2 张，最多读取 20 张；失效链接会在前台自动跳过。</small>
+                        </div>
+                        <div class="control-grid slideshow-timing-grid">
+                            <div class="control-group">
+                                <label for="background-slideshow-interval">轮播间隔 <output id="background-slideshow-interval-value">10 秒</output></label>
+                                <input type="range" id="background-slideshow-interval" min="4" max="120" step="1" value="10">
+                            </div>
+                            <div class="control-group">
+                                <label for="background-slideshow-transition">涟漪时长 <output id="background-slideshow-transition-value">1.8 秒</output></label>
+                                <input type="range" id="background-slideshow-transition" min="0.6" max="6" step="0.1" value="1.8">
+                            </div>
+                            <div class="control-group">
+                                <label for="background-slideshow-strength">涟漪强度 <output id="background-slideshow-strength-value">68%</output></label>
+                                <input type="range" id="background-slideshow-strength" min="0.15" max="1" step="0.05" value="0.68">
+                            </div>
                         </div>
                     </section>
 
@@ -522,6 +554,6 @@
         </main>
     </div>
     <script src="auth.js"></script>
-    <script src="admin-app.js"></script>
+    <script src="admin-app.js?v=20260911-1"></script>
 </body>
 </html>

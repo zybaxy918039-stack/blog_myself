@@ -28,6 +28,7 @@ blog/
 ## 数据与保存方式
 
 - 所有站点配置（外观、个人资料、音乐、首页气泡、书单、书评）保存在 D1 `settings` 表；后台发布的文章与草稿保存在 D1 `articles` 表；评论与上传元数据分别使用 `comments`、`uploads` 表。
+- 全局背景支持多图片轮播。后台可以逐行填写图片链接，并分别设置轮播间隔、涟漪过渡时长和涟漪强度；单张背景保留为加载失败时的后备。
 - 公开页面由 Functions 从 D1 读取数据后由 `functions/_lib/templates.mjs` 服务端渲染，不注入任何 `site-data-json`，也不向 localStorage 写入覆盖值。
 - 后台所有写操作都通过 `/api/admin/*` 接口落到 D1；附件与上传图片走 R2 存储桶（绑定名 `BLOG_ATTACHMENTS`）。
 

@@ -154,10 +154,122 @@ body {
   background-attachment: fixed;
 }
 
-.backdrop-layer {
+.background-slideshow {
   position: fixed;
   inset: 0;
   z-index: 0;
+  overflow: hidden;
+  pointer-events: none;
+  background: transparent;
+  --ripple-x: 50%;
+  --ripple-y: 50%;
+  --ripple-duration: 1800ms;
+  --ripple-strength: 0.68;
+}
+
+.background-slide {
+  position: absolute;
+  inset: -2.5%;
+  background-position: center;
+  background-size: cover;
+  will-change: clip-path, opacity, transform;
+}
+
+.background-slide-current {
+  opacity: 1;
+}
+
+.background-slide-next {
+  opacity: 0;
+}
+
+.background-slide-next.is-rippling {
+  opacity: 1;
+  filter: url("#water-ripple-filter");
+  animation: water-ripple-reveal var(--ripple-duration) cubic-bezier(0.22, 0.62, 0.24, 1) both;
+}
+
+.background-ripple {
+  position: fixed;
+  left: var(--ripple-x);
+  top: var(--ripple-y);
+  z-index: 2;
+  width: 1px;
+  height: 1px;
+  opacity: 0;
+  --ripple-x: 50%;
+  --ripple-y: 50%;
+  --ripple-duration: 1800ms;
+  --ripple-strength: 0.68;
+}
+
+.background-ripple.is-active {
+  opacity: calc(var(--ripple-strength) * 0.42);
+}
+
+.background-ripple span {
+  position: absolute;
+  left: 0;
+  top: 0;
+  width: 10vmax;
+  height: 10vmax;
+  border: clamp(1px, 0.16vw, 3px) solid rgba(238, 255, 251, 0.78);
+  border-radius: 50%;
+  box-shadow: 0 0 28px rgba(166, 235, 220, 0.34), inset 0 0 28px rgba(166, 235, 220, 0.22);
+  transform: translate(-50%, -50%) scale(0.06);
+}
+
+.background-ripple.is-active span {
+  animation: water-ripple-ring var(--ripple-duration) ease-out both;
+}
+
+.background-ripple.is-active span:nth-child(2) {
+  animation-delay: calc(var(--ripple-duration) * 0.1);
+}
+
+.background-ripple.is-active span:nth-child(3) {
+  animation-delay: calc(var(--ripple-duration) * 0.2);
+}
+
+.background-filter-defs {
+  position: absolute;
+}
+
+@keyframes water-ripple-reveal {
+  0% {
+    -webkit-clip-path: circle(0 at var(--ripple-x) var(--ripple-y));
+    clip-path: circle(0 at var(--ripple-x) var(--ripple-y));
+    transform: scale(1.035);
+  }
+  68% {
+    filter: url("#water-ripple-filter");
+  }
+  100% {
+    -webkit-clip-path: circle(150vmax at var(--ripple-x) var(--ripple-y));
+    clip-path: circle(150vmax at var(--ripple-x) var(--ripple-y));
+    filter: none;
+    transform: scale(1);
+  }
+}
+
+@keyframes water-ripple-ring {
+  0% {
+    opacity: 0;
+    transform: translate(-50%, -50%) scale(0.06);
+  }
+  16% {
+    opacity: 1;
+  }
+  100% {
+    opacity: 0;
+    transform: translate(-50%, -50%) scale(3.8);
+  }
+}
+
+.backdrop-layer {
+  position: fixed;
+  inset: 0;
+  z-index: 1;
   pointer-events: none;
   background: var(--backdrop-surface);
   -webkit-backdrop-filter: blur(var(--backdrop-blur)) saturate(1.12);
@@ -172,7 +284,7 @@ body {
 /* Layout */
 .page-shell {
   position: relative;
-  z-index: 1;
+  z-index: 3;
   width: 100%;
   max-width: none;
   margin: 0 auto;

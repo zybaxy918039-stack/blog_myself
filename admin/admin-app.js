@@ -12,6 +12,17 @@
       panelBlur: 12,
       contentWidth: 1100
     },
+    backgroundSlideshow: {
+      enabled: true,
+      images: [
+        "/assets/bg-mist-morning.jpg",
+        "/assets/bg-night-ink.jpg",
+        "/assets/bg-warm-desk.jpg"
+      ],
+      intervalMs: 10000,
+      transitionMs: 1800,
+      rippleStrength: 0.68
+    },
     homeProfile: {
       avatar: "书",
       name: "博主",
@@ -1027,6 +1038,11 @@
       "site-title",
       "site-subtitle",
       "bg-url",
+      "background-slideshow-enabled",
+      "background-slideshow-images",
+      "background-slideshow-interval",
+      "background-slideshow-transition",
+      "background-slideshow-strength",
       "backdrop-opacity-range",
       "backdrop-blur-range",
       "panel-opacity-range",
@@ -1063,13 +1079,18 @@
           panelBlur: Number(field("panel-blur-range").value),
           contentWidth: Number(field("content-width-range").value)
         };
+        var backgroundSlideshow = readBackgroundSlideshow();
         try {
           await requestJson("/api/admin/site-data", {
             method: "PUT",
-            body: JSON.stringify({ appearance: appearance })
+            body: JSON.stringify({
+              appearance: appearance,
+              backgroundSlideshow: backgroundSlideshow
+            })
           });
           state.siteData.appearance = appearance;
-          showStatus(field("status-line"), "外观已保存到 Cloudflare D1");
+          state.siteData.backgroundSlideshow = backgroundSlideshow;
+          showStatus(field("status-line"), "外观与背景轮播已保存到 Cloudflare D1");
         } catch (error) {
           showStatus(field("status-line"), error.message, false);
         }
@@ -1080,13 +1101,17 @@
     if (resetButton) {
       resetButton.addEventListener("click", async function () {
         state.siteData.appearance = JSON.parse(JSON.stringify(DEFAULTS.appearance));
+        state.siteData.backgroundSlideshow = JSON.parse(JSON.stringify(DEFAULTS.backgroundSlideshow));
         renderAppearanceControls();
         try {
           await requestJson("/api/admin/site-data", {
             method: "PUT",
-            body: JSON.stringify({ appearance: state.siteData.appearance })
+            body: JSON.stringify({
+              appearance: state.siteData.appearance,
+              backgroundSlideshow: state.siteData.backgroundSlideshow
+            })
           });
-          showStatus(field("status-line"), "外观已恢复默认");
+          showStatus(field("status-line"), "外观与背景轮播已恢复默认");
         } catch (error) {
           showStatus(field("status-line"), error.message, false);
         }
@@ -1096,6 +1121,7 @@
 
   function renderAppearanceControls() {
     var appearance = state.siteData.appearance;
+    var slideshow = state.siteData.backgroundSlideshow || DEFAULTS.backgroundSlideshow;
     field("site-title").value = appearance.siteTitle;
     field("site-subtitle").value = appearance.siteSubtitle;
     field("bg-url").value = inputFromBackground(appearance.image);
@@ -1104,6 +1130,13 @@
     field("panel-opacity-range").value = appearance.panelOpacity;
     field("panel-blur-range").value = appearance.panelBlur;
     field("content-width-range").value = appearance.contentWidth;
+    field("background-slideshow-enabled").checked = slideshow.enabled !== false;
+    field("background-slideshow-images").value = Array.isArray(slideshow.images)
+      ? slideshow.images.join("\n")
+      : "";
+    field("background-slideshow-interval").value = (Number(slideshow.intervalMs) || 10000) / 1000;
+    field("background-slideshow-transition").value = (Number(slideshow.transitionMs) || 1800) / 1000;
+    field("background-slideshow-strength").value = Number(slideshow.rippleStrength) || 0.68;
 
     var currentImage = inputFromBackground(appearance.image);
     document.querySelectorAll(".preset-card[data-image]").forEach(function (card) {
@@ -1117,7 +1150,13 @@
 
   function previewAppearanceFromInputs() {
     var root = document.documentElement;
-    var nextImage = field("bg-url").value.trim()
+    var slideshowImages = field("background-slideshow-images").value
+      .split(/\r?\n/)
+      .map(function (value) { return value.trim(); })
+      .filter(Boolean);
+    var nextImage = field("background-slideshow-enabled").checked && slideshowImages.length
+      ? backgroundFromInput(slideshowImages[0])
+      : field("bg-url").value.trim()
       ? backgroundFromInput(field("bg-url").value)
       : DEFAULTS.appearance.image;
     root.style.setProperty("--bg-image", nextImage);
@@ -1135,11 +1174,31 @@
       ["backdrop-blur-range", "backdrop-blur-value", function (v) { return v + "px"; }],
       ["panel-opacity-range", "panel-opacity-value", function (v) { return Math.round(Number(v) * 100) + "%"; }],
       ["panel-blur-range", "panel-blur-value", function (v) { return v + "px"; }],
-      ["content-width-range", "content-width-value", function (v) { return v + "px"; }]
+      ["content-width-range", "content-width-value", function (v) { return v + "px"; }],
+      ["background-slideshow-interval", "background-slideshow-interval-value", function (v) { return Number(v) + " 秒"; }],
+      ["background-slideshow-transition", "background-slideshow-transition-value", function (v) { return Number(v).toFixed(1) + " 秒"; }],
+      ["background-slideshow-strength", "background-slideshow-strength-value", function (v) { return Math.round(Number(v) * 100) + "%"; }]
     ];
     mappings.forEach(function (item) {
       syncRangeOutput(field(item[0]), field(item[1]), item[2]);
     });
+  }
+
+  function readBackgroundSlideshow() {
+    var images = field("background-slideshow-images").value
+      .split(/\r?\n/)
+      .map(function (value) { return value.trim(); })
+      .filter(function (value, index, values) {
+        return value && !/^javascript:/i.test(value) && values.indexOf(value) === index;
+      })
+      .slice(0, 20);
+    return {
+      enabled: field("background-slideshow-enabled").checked,
+      images: images,
+      intervalMs: Math.round(Number(field("background-slideshow-interval").value) * 1000),
+      transitionMs: Math.round(Number(field("background-slideshow-transition").value) * 1000),
+      rippleStrength: Number(field("background-slideshow-strength").value)
+    };
   }
 
   function backgroundFromInput(value) {

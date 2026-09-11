@@ -101,6 +101,32 @@ function footerHtml(siteData) {
   return `<footer class="site-footer"><p>&copy; 2026 ${escapeHtml(title)}</p></footer>`;
 }
 
+function slideshowHtml(siteData) {
+  const source = siteData.backgroundSlideshow || {};
+  const config = {
+    enabled: source.enabled !== false,
+    images: Array.isArray(source.images)
+      ? source.images.map((image) => String(image || "").trim()).filter(Boolean).slice(0, 20)
+      : [],
+    intervalMs: Math.min(120000, Math.max(3000, Number(source.intervalMs) || 10000)),
+    transitionMs: Math.min(6000, Math.max(600, Number(source.transitionMs) || 1800)),
+    rippleStrength: Math.min(1, Math.max(0.15, Number(source.rippleStrength) || 0.68))
+  };
+  const json = JSON.stringify(config).replace(/</g, "\\u003c");
+  return (
+    `<div class="background-slideshow" aria-hidden="true">` +
+    `<div class="background-slide background-slide-current"></div>` +
+    `<div class="background-slide background-slide-next"></div>` +
+    `<svg class="background-filter-defs" width="0" height="0" aria-hidden="true"><defs>` +
+    `<filter id="water-ripple-filter" x="-10%" y="-10%" width="120%" height="120%">` +
+    `<feTurbulence type="fractalNoise" baseFrequency="0.012 0.045" numOctaves="2" seed="7" result="noise"/>` +
+    `<feDisplacementMap in="SourceGraphic" in2="noise" scale="18" xChannelSelector="R" yChannelSelector="B"/>` +
+    `</filter></defs></svg></div>` +
+    `<div class="background-ripple" aria-hidden="true"><span></span><span></span><span></span></div>` +
+    `<script id="background-slideshow-data" type="application/json">${json}</script>`
+  );
+}
+
 export function renderPage({
   siteData,
   title,
@@ -118,14 +144,15 @@ export function renderPage({
     `<meta charset="UTF-8">\n<meta name="viewport" content="width=device-width, initial-scale=1.0">\n` +
     `<title>${escapeHtml(title)}</title>\n` +
     `<meta name="description" content="${escapeHtml(description)}">\n` +
-    `<link rel="stylesheet" href="/style.css?v=20260905-2">\n` +
+    `<link rel="stylesheet" href="/style.css?v=20260911-1">\n` +
     `<style>:root{${appearanceStyle(appearance)}}</style>\n` +
     `</head>\n<body${bodyClassAttr}>\n` +
+    `${slideshowHtml(siteData)}\n` +
     `<div class="backdrop-layer" aria-hidden="true"></div>\n` +
     `<div class="page-shell">\n${headerHtml(siteData, active)}\n` +
     `${mainHtml}\n` +
     (footer ? footerHtml(siteData) : "") +
-    `<script src="/script.js" defer></script>\n` +
+    `<script src="/script.js?v=20260911-1" defer></script>\n` +
     `</body>\n</html>`
   );
 }

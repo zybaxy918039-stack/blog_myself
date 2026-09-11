@@ -42,6 +42,17 @@ export const DEFAULTS = {
     panelBlur: 12,
     contentWidth: 1100
   },
+  backgroundSlideshow: {
+    enabled: true,
+    images: [
+      "/assets/bg-mist-morning.jpg",
+      "/assets/bg-night-ink.jpg",
+      "/assets/bg-warm-desk.jpg"
+    ],
+    intervalMs: 10000,
+    transitionMs: 1800,
+    rippleStrength: 0.68
+  },
   homeProfile: {
     avatar: "书",
     name: "博主",

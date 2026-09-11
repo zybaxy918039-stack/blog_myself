@@ -56,7 +56,126 @@
     });
   }
 
+  function initBackgroundSlideshow() {
+    const dataNode = document.getElementById("background-slideshow-data");
+    const stage = document.querySelector(".background-slideshow");
+    if (!dataNode || !stage) return;
+
+    let config;
+    try {
+      config = JSON.parse(dataNode.textContent || "{}");
+    } catch (error) {
+      return;
+    }
+    if (!config.enabled || !Array.isArray(config.images)) return;
+
+    function normalizeUrl(value) {
+      const url = String(value || "").trim();
+      if (!url || /^javascript:/i.test(url)) return "";
+      if (/^(https?:|data:image\/|blob:|\/)/i.test(url)) return url;
+      return "/" + url.replace(/^\.\//, "").replace(/^(\.\.\/)+/, "");
+    }
+
+    const urls = config.images
+      .map(normalizeUrl)
+      .filter(function (value, index, values) {
+        return value && values.indexOf(value) === index;
+      });
+    if (!urls.length) return;
+
+    const current = stage.querySelector(".background-slide-current");
+    const next = stage.querySelector(".background-slide-next");
+    const ripple = document.querySelector(".background-ripple");
+    if (!current || !next || !ripple) return;
+
+    const transitionMs = Math.min(6000, Math.max(600, Number(config.transitionMs) || 1800));
+    const intervalMs = Math.max(3000, Number(config.intervalMs) || 10000);
+    const strength = Math.min(1, Math.max(0.15, Number(config.rippleStrength) || 0.68));
+    const reducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+    let timer = 0;
+    let index = 0;
+    let running = false;
+
+    function cssImage(url) {
+      return "url(" + JSON.stringify(url) + ")";
+    }
+
+    function preload(url) {
+      return new Promise(function (resolve) {
+        const image = new Image();
+        let settled = false;
+        const timeout = window.setTimeout(function () { finish(""); }, 8000);
+        function finish(result) {
+          if (settled) return;
+          settled = true;
+          window.clearTimeout(timeout);
+          image.onload = null;
+          image.onerror = null;
+          resolve(result);
+        }
+        image.onload = function () { finish(url); };
+        image.onerror = function () { finish(""); };
+        image.src = url;
+      });
+    }
+
+    function schedule(images) {
+      window.clearTimeout(timer);
+      if (document.hidden || images.length < 2 || reducedMotion) return;
+      timer = window.setTimeout(function () { transition(images); }, intervalMs);
+    }
+
+    function transition(images) {
+      if (running || document.hidden) {
+        schedule(images);
+        return;
+      }
+      running = true;
+      const nextIndex = (index + 1) % images.length;
+      const x = 24 + Math.round(Math.random() * 52);
+      const y = 24 + Math.round(Math.random() * 48);
+      stage.style.setProperty("--ripple-x", x + "%");
+      stage.style.setProperty("--ripple-y", y + "%");
+      stage.style.setProperty("--ripple-duration", transitionMs + "ms");
+      stage.style.setProperty("--ripple-strength", String(strength));
+      ripple.style.setProperty("--ripple-x", x + "%");
+      ripple.style.setProperty("--ripple-y", y + "%");
+      ripple.style.setProperty("--ripple-duration", transitionMs + "ms");
+      ripple.style.setProperty("--ripple-strength", String(strength));
+      next.style.backgroundImage = cssImage(images[nextIndex]);
+      next.classList.remove("is-rippling");
+      ripple.classList.remove("is-active");
+      void next.offsetWidth;
+      next.classList.add("is-rippling");
+      ripple.classList.add("is-active");
+
+      window.setTimeout(function () {
+        current.style.backgroundImage = cssImage(images[nextIndex]);
+        next.classList.remove("is-rippling");
+        next.style.backgroundImage = "";
+        ripple.classList.remove("is-active");
+        index = nextIndex;
+        running = false;
+        schedule(images);
+      }, transitionMs);
+    }
+
+    Promise.all(urls.map(preload)).then(function (results) {
+      const images = results.filter(Boolean);
+      if (!images.length) return;
+      stage.style.setProperty("--ripple-duration", transitionMs + "ms");
+      stage.style.setProperty("--ripple-strength", String(strength));
+      ripple.style.setProperty("--ripple-duration", transitionMs + "ms");
+      ripple.style.setProperty("--ripple-strength", String(strength));
+      current.style.backgroundImage = cssImage(images[0]);
+      current.classList.add("is-visible");
+      schedule(images);
+      document.addEventListener("visibilitychange", function () { schedule(images); });
+    });
+  }
+
   function ready() {
+    initBackgroundSlideshow();
     initRipple();
     initFilters();
     initSmoothScroll();
