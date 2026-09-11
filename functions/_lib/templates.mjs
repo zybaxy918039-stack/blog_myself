@@ -140,7 +140,7 @@ export function renderPage({
     `<meta charset="UTF-8">\n<meta name="viewport" content="width=device-width, initial-scale=1.0">\n` +
     `<title>${escapeHtml(title)}</title>\n` +
     `<meta name="description" content="${escapeHtml(description)}">\n` +
-    `<link rel="stylesheet" href="/style.css?v=20260911-1">\n` +
+    `<link rel="stylesheet" href="/style.css?v=20260911-2">\n` +
     `<style>:root{${appearanceStyle(appearance)}}</style>\n` +
     `</head>\n<body${bodyClassAttr}>\n` +
     `${slideshowHtml(siteData)}\n` +
@@ -148,7 +148,7 @@ export function renderPage({
     `<div class="page-shell">\n${headerHtml(siteData, active)}\n` +
     `${mainHtml}\n` +
     (footer ? footerHtml(siteData) : "") +
-    `<script src="/script.js?v=20260911-1" defer></script>\n` +
+    `<script src="/script.js?v=20260911-2" defer></script>\n` +
     `</body>\n</html>`
   );
 }

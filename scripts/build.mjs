@@ -136,6 +136,7 @@ async function readMarkdownPosts() {
 const STATIC_ENTRIES = [
   "style.css",
   "script.js",
+  "_headers",
   "deploy.html",
   "deploy.css",
   "deploy.js",
